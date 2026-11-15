@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión | Nexora</title>
+  <meta name="description" content="Inicia sesión o crea tu cuenta de Nexora.">
+  <meta name="theme-color" content="#f4f6fb">
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="login.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Nexora, ir al inicio">
+        <span class="logo__mark"><i class="ph-fill ph-cpu" aria-hidden="true"></i></span>
+        <span class="logo__text">Nexora</span>
+      </a>
+      <nav class="nav" id="mainNav" aria-label="Principal">
+        <ul class="nav__list">
+          <li><a href="index.html" class="nav__link">Inicio</a></li>
+          <li><a href="promociones.html" class="nav__link">Promociones</a></li>
+          <li><a href="productos.html" class="nav__link">Productos</a></li>
+          <li><a href="consultas.html" class="nav__link">Consultas</a></li>
+          <li><a href="login.html" class="nav__link" aria-current="page">Iniciar sesión</a></li>
+        </ul>
+        <a href="productos.html" class="btn btn--primary btn--sm nav__cta">Ver productos <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="icon-btn menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú">
+          <i class="ph ph-list" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="login-page">
+      <div class="container">
+        <div class="auth login-card glass">
+          <aside class="auth__visual" aria-hidden="true">
+            <div class="auth__visual-inner">
+              <span class="logo__mark"><i class="ph-fill ph-cpu"></i></span>
+              <h3>Tu setup ideal te está esperando.</h3>
+              <ul>
+                <li><i class="ph-fill ph-check-circle"></i> Guarda tu carrito</li>
+                <li><i class="ph-fill ph-check-circle"></i> Compra con pago seguro</li>
+                <li><i class="ph-fill ph-check-circle"></i> Ofertas exclusivas</li>
+              </ul>
+            </div>
+          </aside>
+
+          <div class="auth__panel">
+            <span class="eyebrow">Cuenta Nexora</span>
+            <h2 id="loginTitle">Bienvenido a Nexora</h2>
+            <p class="notice login-message" id="loginNotice" role="status" aria-live="polite" hidden></p>
+
+            <div class="segmented" role="tablist" aria-label="Acceso">
+              <button type="button" role="tab" id="loginTab" aria-selected="true" aria-controls="loginForm">Iniciar sesión</button>
+              <button type="button" role="tab" id="registerTab" aria-selected="false" aria-controls="registerForm" tabindex="-1">Crear cuenta</button>
+            </div>
+
+            <form id="loginForm" class="form" role="tabpanel" aria-labelledby="loginTab">
+              <div class="field">
+                <label for="loginEmail">Correo electrónico</label>
+                <input type="email" id="loginEmail" autocomplete="email" required maxlength="120" placeholder="tu@correo.com">
+              </div>
+              <div class="field">
+                <label for="loginPassword">Contraseña</label>
+                <div class="password">
+                  <input type="password" id="loginPassword" autocomplete="current-password" required minlength="6" maxlength="64" placeholder="Mínimo 6 caracteres">
+                  <button type="button" class="pw-toggle" aria-label="Mostrar contraseña" data-password-toggle="loginPassword"><i class="ph ph-eye" aria-hidden="true"></i></button>
+                </div>
+              </div>
+              <button type="submit" class="btn btn--primary btn--lg btn--block">Ingresar</button>
+            </form>
+
+            <form id="registerForm" class="form" role="tabpanel" aria-labelledby="registerTab" hidden>
+              <div class="field">
+                <label for="registerName">Nombre completo</label>
+                <input type="text" id="registerName" autocomplete="name" required minlength="2" maxlength="60" placeholder="Tu nombre">
+              </div>
+              <div class="field">
+                <label for="registerEmail">Correo electrónico</label>
+                <input type="email" id="registerEmail" autocomplete="email" required maxlength="120" placeholder="tu@correo.com">
+              </div>
+              <div class="field">
+                <label for="registerPassword">Contraseña</label>
+                <div class="password">
+                  <input type="password" id="registerPassword" autocomplete="new-password" required minlength="6" maxlength="64" placeholder="Mínimo 6 caracteres">
+                  <button type="button" class="pw-toggle" aria-label="Mostrar contraseña" data-password-toggle="registerPassword"><i class="ph ph-eye" aria-hidden="true"></i></button>
+                </div>
+              </div>
+              <label class="check-row"><input type="checkbox" class="checkbox" required> <span>Acepto los términos y la política de privacidad.</span></label>
+              <button type="submit" class="btn btn--primary btn--lg btn--block">Crear mi cuenta</button>
+            </form>
+            <p class="fineprint"><i class="ph ph-lock-key" aria-hidden="true"></i> Demo académica: la sesión se simula en este navegador; no se guarda tu contraseña.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="logo" aria-label="Nexora, volver al inicio">
+        <span class="logo__mark"><i class="ph-fill ph-cpu" aria-hidden="true"></i></span>
+        <span class="logo__text">Nexora</span>
+      </a>
+      <p>© 2026 Nexora Tech. Proyecto académico de demostración.</p>
+      <ul class="footer-links">
+        <li><a href="promociones.html">Promociones</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="consultas.html">Consultas</a></li>
+      </ul>
+    </div>
+  </footer>
+</body>
+</html>
