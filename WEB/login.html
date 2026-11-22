@@ -4,140 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Iniciar sesión | Nexora</title>
+  <meta name="description" content="Accede a tu cuenta de Nexora para consultar tus productos y pedidos.">
+  <meta name="theme-color" content="#f4f6fb">
+  <script>document.documentElement.classList.add('js');</script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
   <link rel="stylesheet" href="styles.css">
-  <script>document.documentElement.classList.add('js');</script>
+  <script src="js/auth.js" defer></script>
 </head>
-<body>
+<body data-page="auth">
+  <a class="skip-link" href="#main">Saltar al contenido</a>
   <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
   <header class="site-header" id="siteHeader">
     <div class="container header-inner">
-      <a href="index.html" class="logo"><span class="logo__mark"><i class="ph-fill ph-cpu"></i></span><span class="logo__text">Nexora</span></a>
+      <a href="index.html" class="logo" aria-label="Nexora, ir al inicio">
+        <span class="logo__mark"><i class="ph-fill ph-cpu" aria-hidden="true"></i></span>
+        <span class="logo__text">Nexora</span>
+      </a>
       <nav class="nav" id="mainNav" aria-label="Principal">
-        <ul class="nav__list"><li><a href="index.html" class="nav__link">Inicio</a></li><li><a href="promociones.html" class="nav__link">Promociones</a></li><li><a href="productos.html" class="nav__link">Productos</a></li><li><a href="consultas.html" class="nav__link">Consultas</a></li></ul>
-        <a href="productos.html" class="btn btn--primary btn--sm nav__cta">Ver productos <i class="ph ph-arrow-right"></i></a>
+        <ul class="nav__list">
+          <li><a href="index.html" class="nav__link">Inicio</a></li>
+          <li><a href="promociones.html" class="nav__link">Promociones</a></li>
+          <li><a href="consultas.html" class="nav__link">Consultas</a></li>
+        </ul>
+        <a href="productos.html" class="btn btn--primary btn--sm nav__cta">Ver productos <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
       </nav>
       <div class="header-actions">
-        <button type="button" class="icon-btn menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú"><i class="ph ph-list"></i></button>
+        <button type="button" class="icon-btn menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú">
+          <i class="ph ph-list" aria-hidden="true"></i>
+        </button>
       </div>
     </div>
   </header>
 
   <main id="main" class="auth-page">
     <div class="container">
-      <section class="auth-card glass">
+      <section class="auth-card" aria-labelledby="loginTitle">
         <header class="auth-header">
-          <span class="logo"><span class="logo__mark"><i class="ph-fill ph-cpu"></i></span><span class="logo__text">Nexora</span></span>
+          <span class="logo__mark" aria-hidden="true"><i class="ph-fill ph-cpu"></i></span>
           <span class="eyebrow">BIENVENIDO DE NUEVO</span>
-          <h1>Iniciar sesión</h1>
+          <h1 id="loginTitle">Iniciar sesión</h1>
           <p>Accede para consultar tus productos y pedidos.</p>
         </header>
+
         <p class="auth-message" id="authMessage" role="status" aria-live="polite" hidden></p>
-        <form id="loginForm" class="form">
+
+        <form id="loginForm" class="form" novalidate>
           <div class="field">
             <label for="loginEmail">Correo electrónico</label>
-            <div class="input-wrap"><i class="ph ph-envelope"></i><input type="email" id="loginEmail" autocomplete="email" required maxlength="120" placeholder="nombre@correo.com"></div>
+            <div class="input-wrap">
+              <i class="ph ph-envelope" aria-hidden="true"></i>
+              <input type="email" id="loginEmail" autocomplete="email" required maxlength="120" placeholder="nombre@correo.com">
+            </div>
           </div>
+
           <div class="field">
             <label for="loginPassword">Contraseña</label>
-            <div class="input-wrap"><i class="ph ph-lock-key"></i><input type="password" id="loginPassword" autocomplete="current-password" required minlength="6" maxlength="64" placeholder="Ingresa tu contraseña"><button type="button" class="pw-toggle" aria-label="Mostrar contraseña" data-password-toggle="loginPassword"><i class="ph ph-eye"></i></button></div>
+            <div class="input-wrap">
+              <i class="ph ph-lock-key" aria-hidden="true"></i>
+              <input type="password" id="loginPassword" autocomplete="current-password" required minlength="6" maxlength="64" placeholder="Ingresa tu contraseña">
+              <button type="button" class="pw-toggle" aria-label="Mostrar contraseña" data-password-toggle="loginPassword"><i class="ph ph-eye" aria-hidden="true"></i></button>
+            </div>
           </div>
-          <div class="auth-options"><label class="check-row"><input type="checkbox" class="checkbox" id="rememberEmail"><span>Recordar mi correo</span></label><a href="#" id="forgotPassword">¿Olvidaste tu contraseña?</a></div>
-          <button type="submit" class="btn btn--primary btn--lg btn--block">Ingresar <i class="ph ph-arrow-right"></i></button>
+
+          <div class="auth-options">
+            <label class="check-row"><input type="checkbox" class="checkbox" id="rememberEmail"><span>Recordar mi correo</span></label>
+            <a href="#" id="forgotPassword">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--lg btn--block">Ingresar <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
         </form>
+
         <p class="auth-footer">¿Aún no tienes una cuenta? <a href="registro.html">Regístrate aquí</a></p>
       </section>
     </div>
   </main>
-  <script>
-    (() => {
-      const form = document.getElementById('loginForm');
-      const emailInput = document.getElementById('loginEmail');
-      const rememberEmail = document.getElementById('rememberEmail');
-      const message = document.getElementById('authMessage');
-      const nav = document.getElementById('mainNav');
-      const menuToggle = document.getElementById('menuToggle');
-
-      const showMessage = (text, state = 'error') => {
-        message.textContent = text;
-        message.dataset.state = state;
-        message.hidden = !text;
-      };
-
-      try {
-        const savedEmail = localStorage.getItem('nexora.rememberedEmail');
-        if (savedEmail) {
-          emailInput.value = savedEmail;
-          rememberEmail.checked = true;
-        }
-      } catch {
-        showMessage('No se pudo acceder al almacenamiento del navegador.', 'error');
-      }
-
-      document.querySelectorAll('[data-password-toggle]').forEach((button) => {
-        button.addEventListener('click', () => {
-          const input = document.getElementById(button.dataset.passwordToggle);
-          const show = input.type === 'password';
-          input.type = show ? 'text' : 'password';
-          button.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
-          button.firstElementChild.className = show ? 'ph ph-eye-slash' : 'ph ph-eye';
-        });
-      });
-
-      document.getElementById('forgotPassword').addEventListener('click', (event) => {
-        event.preventDefault();
-        showMessage('La recuperación de contraseña no está disponible en esta versión.', 'error');
-      });
-
-      menuToggle.addEventListener('click', () => {
-        const open = nav.classList.toggle('is-open');
-        menuToggle.setAttribute('aria-expanded', String(open));
-        menuToggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
-        menuToggle.firstElementChild.className = open ? 'ph ph-x' : 'ph ph-list';
-      });
-      nav.addEventListener('click', (event) => {
-        if (event.target.closest('a')) {
-          nav.classList.remove('is-open');
-          menuToggle.setAttribute('aria-expanded', 'false');
-          menuToggle.setAttribute('aria-label', 'Abrir menú');
-          menuToggle.firstElementChild.className = 'ph ph-list';
-        }
-      });
-
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const email = emailInput.value.trim().toLowerCase();
-
-        try {
-          const rawUsers = localStorage.getItem('nexora.users');
-          const users = rawUsers ? JSON.parse(rawUsers) : {};
-          if (!users || typeof users !== 'object' || Array.isArray(users)) {
-            throw new Error('El registro de cuentas no tiene un formato válido.');
-          }
-
-          const storedName = users[email];
-          const name = typeof storedName === 'string' && storedName.trim()
-            ? storedName
-            : email.split('@')[0]
-              .replace(/[._-]+/g, ' ')
-              .replace(/\b\p{L}/gu, (letter) => letter.toUpperCase());
-
-          localStorage.setItem('nexora.session', JSON.stringify({ name, email }));
-          if (rememberEmail.checked) {
-            localStorage.setItem('nexora.rememberedEmail', email);
-          } else {
-            localStorage.removeItem('nexora.rememberedEmail');
-          }
-          window.location.assign('index.html');
-        } catch {
-          showMessage('No se pudo iniciar sesión. Revisa el almacenamiento del navegador e inténtalo nuevamente.', 'error');
-        }
-      });
-    })();
-  </script>
 </body>
 </html>

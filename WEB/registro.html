@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear una cuenta | Nexora</title>
+  <meta name="description" content="Regístrate en Nexora para comprar laptops, PCs y componentes y consultar tus pedidos.">
+  <meta name="theme-color" content="#f4f6fb">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="js/auth.js" defer></script>
+</head>
+<body data-page="auth">
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Nexora, ir al inicio">
+        <span class="logo__mark"><i class="ph-fill ph-cpu" aria-hidden="true"></i></span>
+        <span class="logo__text">Nexora</span>
+      </a>
+      <nav class="nav" id="mainNav" aria-label="Principal">
+        <ul class="nav__list">
+          <li><a href="index.html" class="nav__link">Inicio</a></li>
+          <li><a href="promociones.html" class="nav__link">Promociones</a></li>
+          <li><a href="consultas.html" class="nav__link">Consultas</a></li>
+        </ul>
+        <a href="productos.html" class="btn btn--primary btn--sm nav__cta">Ver productos <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="icon-btn menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú">
+          <i class="ph ph-list" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="auth-page">
+    <div class="container">
+      <section class="auth-card auth-card--wide" aria-labelledby="registerTitle">
+        <header class="auth-header">
+          <span class="logo__mark" aria-hidden="true"><i class="ph-fill ph-cpu"></i></span>
+          <span class="eyebrow">ÚNETE A NUESTRA COMUNIDAD</span>
+          <h1 id="registerTitle">Crear una cuenta</h1>
+          <p>Regístrate para comprar y consultar tus pedidos.</p>
+        </header>
+
+        <p class="auth-message" id="authMessage" role="status" aria-live="polite" hidden></p>
+
+        <form id="registerForm" class="form" novalidate>
+
+          <!-- Datos principales -->
+          <div class="form-grid-auth">
+            <div class="field">
+              <label for="registerName">Nombre completo</label>
+              <div class="input-wrap">
+                <i class="ph ph-user" aria-hidden="true"></i>
+                <input type="text" id="registerName" autocomplete="name" required maxlength="60" placeholder="Tu nombre">
+              </div>
+            </div>
+            <div class="field">
+              <label for="registerPhone">Teléfono</label>
+              <div class="input-wrap">
+                <i class="ph ph-phone" aria-hidden="true"></i>
+                <input type="tel" id="registerPhone" autocomplete="tel-national" inputmode="numeric" required maxlength="9" pattern="[0-9]{9}" placeholder="9 dígitos">
+              </div>
+            </div>
+            <div class="field field--full">
+              <label for="registerEmail">Correo electrónico</label>
+              <div class="input-wrap">
+                <i class="ph ph-envelope" aria-hidden="true"></i>
+                <input type="email" id="registerEmail" autocomplete="email" required maxlength="120" placeholder="nombre@correo.com">
+              </div>
+            </div>
+          </div>
+
+          <!-- Información personal -->
+          <h2 class="auth-divider">Información personal</h2>
+          <div class="field">
+            <label for="registerBirth">Fecha de nacimiento</label>
+            <div class="input-wrap">
+              <i class="ph ph-calendar-blank" aria-hidden="true"></i>
+              <input type="date" id="registerBirth" autocomplete="bday" required>
+            </div>
+          </div>
+
+          <!-- Documento de identidad -->
+          <h2 class="auth-divider">Documento de identidad (opcional)</h2>
+          <p class="auth-help" id="docHelp">Puedes dejar estos datos vacíos. Si agregas un documento, completa su tipo y número.</p>
+          <div class="form-grid-auth">
+            <div class="field">
+              <label for="registerDocType">Tipo de documento</label>
+              <div class="input-wrap">
+                <i class="ph ph-identification-card" aria-hidden="true"></i>
+                <select id="registerDocType" aria-describedby="docHelp">
+                  <option value="">Sin documento</option>
+                  <option value="DNI">DNI</option>
+                  <option value="CE">Carnet de Extranjería</option>
+                  <option value="PAS">Pasaporte</option>
+                </select>
+                <i class="ph ph-caret-down caret" aria-hidden="true"></i>
+              </div>
+            </div>
+            <div class="field">
+              <label for="registerDocNumber">Número de documento</label>
+              <div class="input-wrap">
+                <i class="ph ph-hash" aria-hidden="true"></i>
+                <input type="text" id="registerDocNumber" autocomplete="off" maxlength="20" placeholder="Número de documento" aria-describedby="docHelp" disabled>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dirección -->
+          <h2 class="auth-divider">Dirección</h2>
+          <div class="form-grid-auth form-grid-auth--3">
+            <div class="field">
+              <label for="registerDepartment">Departamento</label>
+              <div class="input-wrap">
+                <i class="ph ph-map-pin" aria-hidden="true"></i>
+                <input type="text" id="registerDepartment" autocomplete="address-level1" required maxlength="40" placeholder="Ej. Lima / Ej. Lambayeque">
+              </div>
+            </div>
+            <div class="field">
+              <label for="registerProvince">Provincia</label>
+              <div class="input-wrap">
+                <i class="ph ph-map-pin" aria-hidden="true"></i>
+                <input type="text" id="registerProvince" autocomplete="address-level2" required maxlength="40" placeholder="Ej. Lima / Ej. Chiclayo">
+              </div>
+            </div>
+            <div class="field">
+              <label for="registerDistrict">Distrito</label>
+              <div class="input-wrap">
+                <i class="ph ph-map-pin" aria-hidden="true"></i>
+                <input type="text" id="registerDistrict" autocomplete="address-level3" required maxlength="40" placeholder="Ej. Santa Anita">
+              </div>
+            </div>
+            <div class="field field--full">
+              <label for="registerAddress">Dirección</label>
+              <div class="input-wrap">
+                <i class="ph ph-house" aria-hidden="true"></i>
+                <input type="text" id="registerAddress" autocomplete="street-address" required maxlength="120" placeholder="Calle o avenida, número, departamento o lote">
+              </div>
+            </div>
+          </div>
+
+          <!-- Seguridad y términos -->
+          <h2 class="auth-divider">Seguridad</h2>
+          <div class="form-grid-auth">
+            <div class="field">
+              <label for="registerPassword">Contraseña</label>
+              <div class="input-wrap">
+                <i class="ph ph-lock-key" aria-hidden="true"></i>
+                <input type="password" id="registerPassword" autocomplete="new-password" required minlength="6" maxlength="64" placeholder="Mínimo 6 caracteres">
+                <button type="button" class="pw-toggle" aria-label="Mostrar contraseña" data-password-toggle="registerPassword"><i class="ph ph-eye" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="registerConfirm">Confirmar contraseña</label>
+              <div class="input-wrap">
+                <i class="ph ph-lock-key" aria-hidden="true"></i>
+                <input type="password" id="registerConfirm" autocomplete="new-password" required minlength="6" maxlength="64" placeholder="Repite la contraseña">
+                <button type="button" class="pw-toggle" aria-label="Mostrar contraseña" data-password-toggle="registerConfirm"><i class="ph ph-eye" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <div class="field--full">
+              <label class="check-row"><input type="checkbox" class="checkbox" id="registerTerms" required><span>Acepto los términos y el tratamiento de mis datos.</span></label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--lg btn--block">Crear cuenta <i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+        </form>
+
+        <p class="auth-footer">¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a></p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

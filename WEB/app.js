@@ -16,7 +16,7 @@
 
   const PRODUCTS = [
     { id: 1,  name: 'MacBook Pro 14″ M3 Pro',        brand: 'Apple',    category: 'Laptops',     price: 8999,  img: '1517336714731-489689fd1ca8' },
-    { id: 2,  name: 'ASUS ROG Zephyrus G14',          brand: 'ASUS',     category: 'Laptops',     price: 6899,  oldPrice: 7599,  img: '1593642632823-8f785ba67e45' },
+    { id: 2,  name: 'ASUS ROG Zephyrus G14',          brand: 'ASUS',     category: 'Laptops',     price: 6899,  oldPrice: 7699,  img: '1593642632823-8f785ba67e45' },
     { id: 3,  name: 'Lenovo ThinkPad X1 Carbon',      brand: 'Lenovo',   category: 'Laptops',     price: 5799,  oldPrice: 6799,  img: '1496181133206-80ce9b88a853' },
     { id: 4,  name: 'HP Spectre x360 14',             brand: 'HP',       category: 'Laptops',     price: 5499,  img: '1525547719571-a2d4ac8945e2' },
     { id: 5,  name: 'Dell XPS 15 OLED',               brand: 'Dell',     category: 'Laptops',     price: 7899,  img: '1541807084-5c52b6b3adef' },
@@ -28,8 +28,8 @@
     { id: 11, name: 'Samsung 990 PRO 2TB NVMe',       brand: 'Samsung',  category: 'Componentes', price: 599,   oldPrice: 719,   img: '1597872200969-2b65d56bd16b' },
     { id: 12, name: 'LG UltraGear 27″ 4K OLED',       brand: 'LG',       category: 'Monitores',   price: 3299,  img: '1527443224154-c4a3942d3acf' },
     { id: 13, name: 'Samsung Odyssey G7 32″',         brand: 'Samsung',  category: 'Monitores',   price: 2199,  oldPrice: 2599,  img: '1611186871348-b1ce696e52c9' },
-    { id: 14, name: 'Logitech MX Master 3S Combo',    brand: 'Logitech', category: 'Periféricos', price: 749,   img: '1593305841991-05c297ba4575' },
-    { id: 15, name: 'Razer BlackWidow V4 Pro',        brand: 'Razer',    category: 'Periféricos', price: 899,   img: '1587614382346-4ec70e388b28' },
+    { id: 14, name: 'Logitech MX Master 3S Combo',    brand: 'Logitech', category: 'Periféricos', price: 749,   oldPrice: 899,   img: '1593305841991-05c297ba4575' },
+    { id: 15, name: 'Razer BlackWidow V4 Pro',        brand: 'Razer',    category: 'Periféricos', price: 899,   oldPrice: 1129,  img: '1587614382346-4ec70e388b28' },
   ];
 
   const PROMOS = [
@@ -113,7 +113,6 @@
     fCategory: byId('fCategory'),
     fPrice: byId('fPrice'),
     fBrand: byId('fBrand'),
-    authDialog: byId('authDialog'),
     cartDialog: byId('cartDialog'),
     payDialog: byId('payDialog'),
     toasts: byId('toasts'),
@@ -286,7 +285,7 @@
           ${p.oldPrice ? `<span class="badge-off">-${discountPct(p)}%</span>` : ''}
         </div>
         <div class="card__body">
-          <p class="card__brand"><i class="ph-fill ph-seal-check" aria-hidden="true"></i>${esc(p.brand)}</p>
+          <p class="card__brand"><span class="brand-dot" aria-hidden="true"></span>${esc(p.brand)}</p>
           <h3 class="card__title">${esc(p.name)}</h3>
           <div class="card__price">
             <strong>${formatPrice(p.price)}</strong>
@@ -328,8 +327,10 @@
     );
 
     grid.innerHTML = list.map(productCard).join('');
+    const empty = byId('promoEmpty');
+    if (empty) empty.hidden = list.length > 0;
     const count = byId('promoResults');
-    if (count) count.textContent = `Mostrando ${list.length} promociones`;
+    if (count) count.innerHTML = `Mostrando <strong>${list.length}</strong> de ${PRODUCTS.filter((p) => p.oldPrice).length} promociones`;
     observeReveals(grid);
   }
 
@@ -350,6 +351,7 @@
     ]);
     fillSelect(brand, [{ label: 'Todas', value: '' }, ...brands.map((value) => ({ label: value, value }))]);
     byId('promoFilters')?.addEventListener('submit', (event) => { event.preventDefault(); renderPromotionsGrid(); });
+    byId('promoEmptyReset')?.addEventListener('click', () => byId('clearPromoFilters')?.click());
     byId('clearPromoFilters')?.addEventListener('click', () => {
       category.value = '';
       brand.value = '';
@@ -376,7 +378,7 @@
       return `
       <article class="promo promo--${promo.theme}" role="group" aria-roledescription="diapositiva" aria-label="${i + 1} de ${PROMOS.length}">
         <div class="promo__body">
-          <span class="promo__tag">${esc(promo.tag)}</span>
+          <span class="promo__tag"><i class="ph-fill ph-tag" aria-hidden="true"></i>${esc(p.category)} · ${esc(promo.tag)}</span>
           <p class="promo__off grad-text">-${discountPct(p)}%</p>
           <h3 class="promo__title">${esc(promo.title)}</h3>
           <p class="promo__text">${esc(promo.text)}</p>
@@ -455,143 +457,17 @@
   }
 
   /* -----------------------------------------------------------------------
-     AUTENTICACIÓN (simulada en el navegador)
+     AUTENTICACIÓN
+     El registro, el inicio de sesión y la barra de navegación (nombre / perfil)
+     viven en js/auth.js. Aquí solo se exige sesión para comprar.
      ----------------------------------------------------------------------- */
-  const auth = {
-    guest: byId('authGuest'),
-    user: byId('authUser'),
-    title: byId('authTitle'),
-    notice: byId('authNotice'),
-    loginForm: byId('loginForm'),
-    registerForm: byId('registerForm'),
-    tabs: $$('[data-tab]'),
-  };
+  const currentPage = () => window.location.pathname.split('/').pop() || 'index.html';
 
-  const initialOf = (name) => (name.trim()[0] || 'U').toUpperCase();
-  const titleCase = (s) => s.replace(/[._-]+/g, ' ').replace(/\b\p{L}/gu, (c) => c.toUpperCase());
-
-  function updateAuthUI() {
-    const user = state.user;
-    const profileIcon = els.profileBtn;
-    if (!profileIcon) return;
-
-    if (user) {
-      profileIcon.innerHTML = `<span class="avatar" aria-hidden="true">${esc(initialOf(user.name))}</span>`;
-      profileIcon.setAttribute('aria-label', `Perfil de ${user.name}`);
-      if (byId('userAvatar')) byId('userAvatar').textContent = initialOf(user.name);
-      if (byId('userName')) byId('userName').textContent = user.name;
-      if (byId('userEmail')) byId('userEmail').textContent = user.email;
-    } else {
-      profileIcon.innerHTML = '<i class="ph ph-user" aria-hidden="true"></i>';
-      profileIcon.setAttribute('aria-label', 'Perfil: iniciar sesión');
-    }
-    if (auth.guest) auth.guest.hidden = !!user;
-    if (auth.user) auth.user.hidden = !user;
-    if (auth.title) auth.title.textContent = user ? `Hola, ${user.name.split(' ')[0]}` : 'Bienvenido a Nexora';
-  }
-
-  function selectTab(name) {
-    const isLogin = name === 'login';
-    auth.tabs.forEach((t) => {
-      const active = t.dataset.tab === name;
-      t.setAttribute('aria-selected', String(active));
-      t.tabIndex = active ? 0 : -1;
-    });
-    auth.loginForm.hidden = !isLogin;
-    auth.registerForm.hidden = isLogin;
-    (isLogin ? byId('lEmail') : byId('rName')).focus();
-  }
-
-  function openAuth({ reason = false } = {}) {
-    auth.notice.hidden = !reason;
-    if (!state.user) selectTab('login');
-    openDialog(els.authDialog);
-  }
-
-  /** Ejecuta `action` si hay sesión; si no, abre el modal de login y la deja pendiente. */
+  /** Ejecuta `action` si hay sesión; si no, guarda la página de origen y redirige a login.html. */
   function requireAuth(action) {
     if (state.user) { action(); return; }
-    state.pending = action;
-    store.set('nexora.returnUrl', window.location.pathname.split('/').pop() || 'index.html');
+    store.set('nexora.returnUrl', currentPage());
     window.location.assign('login.html');
-  }
-
-  function completeLogin(user) {
-    state.user = user;
-    store.set(KEYS.session, user);
-    state.cart = loadCart();
-    updateAuthUI();
-    renderCart();
-
-    const pending = state.pending;
-    state.pending = null;
-    els.authDialog.close();
-    toast(`¡Bienvenido, ${user.name.split(' ')[0]}!`, { icon: 'ph-hand-waving' });
-    if (pending) pending();
-  }
-
-  function logout() {
-    state.user = null;
-    state.cart = [];
-    store.remove(KEYS.session);
-    updateAuthUI();
-    renderCart();
-    els.authDialog.close();
-    toast('Sesión cerrada', { icon: 'ph-sign-out' });
-  }
-
-  function initAuth() {
-    if (!els.authDialog) {
-      if (els.profileBtn) els.profileBtn.addEventListener('click', () => {
-        if (state.user) openCart();
-        else window.location.assign('login.html');
-      });
-      return;
-    }
-    auth.tabs.forEach((t) => t.addEventListener('click', () => selectTab(t.dataset.tab)));
-    auth.tabs.forEach((t) => t.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') selectTab(t.dataset.tab === 'login' ? 'register' : 'login');
-    }));
-
-    auth.loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = byId('lEmail').value.trim().toLowerCase();
-      const users = store.get(KEYS.users, {});
-      const name = users[email] || titleCase(email.split('@')[0]);
-      auth.loginForm.reset();
-      completeLogin({ name, email });
-    });
-
-    auth.registerForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = byId('rName').value.trim();
-      const email = byId('rEmail').value.trim().toLowerCase();
-      const users = store.get(KEYS.users, {});
-      users[email] = name;               // solo se guarda nombre/correo, nunca contraseñas
-      store.set(KEYS.users, users);
-      auth.registerForm.reset();
-      completeLogin({ name, email });
-    });
-
-    // Mostrar / ocultar contraseña
-    $$('.pw-toggle').forEach((btn) => btn.addEventListener('click', () => {
-      const input = byId(btn.dataset.pw);
-      const show = input.type === 'password';
-      input.type = show ? 'text' : 'password';
-      btn.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
-      btn.firstElementChild.className = show ? 'ph ph-eye-slash' : 'ph ph-eye';
-    }));
-
-    // Si el modal se cierra sin autenticarse, se descarta la acción pendiente
-    els.authDialog.addEventListener('close', () => { state.pending = null; });
-
-    // El ícono de perfil es uno de los dos únicos disparadores del modal
-    els.profileBtn.addEventListener('click', () => {
-      if (!state.user) window.location.assign('login.html');
-      else openAuth();
-    });
-    byId('logoutBtn').addEventListener('click', logout);
-    byId('userCartBtn').addEventListener('click', openCart);
   }
 
   /* -----------------------------------------------------------------------
@@ -740,14 +616,18 @@
     if (cartBrowse) {
       cartBrowse.addEventListener('click', () => {
         els.cartDialog.close();
-        byId('productos')?.scrollIntoView({ behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
+        const target = byId('productos');
+        if (target) target.scrollIntoView({ behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
+        else window.location.assign('productos.html');
       });
     }
 
     cartEls.checkout.addEventListener('click', () => {
       if (selectedItems().length === 0) return;
       if (!els.payDialog) {
-        toast('Tu compra está lista. Continúa desde el catálogo para finalizar el pago.', { icon: 'ph-info' });
+        // Esta página no incluye la pasarela: se continúa el pago en el catálogo
+        store.set('nexora.pendingCheckout', true);
+        window.location.assign('productos.html');
         return;
       }
       requireAuth(startPayment);
@@ -930,8 +810,6 @@
     }
     initPromotions();
     initNavigation();
-    initAuth();
-    updateAuthUI();
     initCart();
     initBuyButtons();
     const pendingBuy = store.get('nexora.pendingBuy', null);
@@ -942,6 +820,10 @@
       if (els.cartDialog) openCart();
     }
     initPayment();
+    if (state.user && els.payDialog && store.get('nexora.pendingCheckout', false)) {
+      store.set('nexora.pendingCheckout', false);
+      if (selectedItems().length) startPayment();
+    }
     initContact();
     observeReveals();
   }

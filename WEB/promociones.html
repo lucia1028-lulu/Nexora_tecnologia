@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
   <link rel="stylesheet" href="styles.css">
   <script>document.documentElement.classList.add('js');</script>
+  <script src="js/auth.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -22,9 +23,7 @@
         <ul class="nav__list">
           <li><a href="index.html" class="nav__link">Inicio</a></li>
           <li><a href="promociones.html" class="nav__link" aria-current="page">Promociones</a></li>
-          <li><a href="productos.html" class="nav__link">Productos</a></li>
           <li><a href="consultas.html" class="nav__link">Consultas</a></li>
-          <li><a href="login.html" class="nav__link">Iniciar sesión</a></li>
         </ul>
         <a href="productos.html" class="btn btn--primary btn--sm nav__cta">Ver productos <i class="ph ph-arrow-right"></i></a>
       </nav>
@@ -59,6 +58,12 @@
           <button type="button" class="link-btn" id="clearPromoFilters"><i class="ph ph-arrow-counter-clockwise"></i> Limpiar filtros</button>
         </div>
         <ul class="grid" id="promoGrid" aria-label="Lista de promociones"></ul>
+        <div class="empty" id="promoEmpty" hidden>
+          <i class="ph ph-tag" aria-hidden="true"></i>
+          <h3>No hay promociones con esos filtros</h3>
+          <p>Prueba con otra categoría, marca o porcentaje de descuento.</p>
+          <button type="button" class="btn btn--ghost" id="promoEmptyReset">Ver todas las promociones</button>
+        </div>
       </div>
     </section>
   </main>
@@ -66,8 +71,6 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <a href="index.html" class="logo"><span class="logo__mark"><i class="ph-fill ph-cpu"></i></span><span class="logo__text">Nexora</span></a>
-      <p>© 2026 Nexora Tech. Proyecto académico de demostración.</p>
-      <ul class="footer-links"><li><a href="promociones.html">Promociones</a></li><li><a href="productos.html">Productos</a></li><li><a href="consultas.html">Consultas</a></li></ul>
     </div>
   </footer>
 

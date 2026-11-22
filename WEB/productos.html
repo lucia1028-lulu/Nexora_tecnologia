@@ -21,6 +21,7 @@
 
   <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
   <link rel="stylesheet" href="styles.css">
+  <script src="js/auth.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -41,8 +42,8 @@
         <ul class="nav__list">
           <li><a href="index.html" class="nav__link" data-spy="inicio">Inicio</a></li>
           <li><a href="promociones.html" class="nav__link" data-spy="promociones">Promociones</a></li>
-          <li><a href="productos.html" class="nav__link" data-spy="productos">Productos</a></li>
           <li><a href="consultas.html" class="nav__link" data-spy="consultas">Consultas</a></li>
+
         </ul>
         <a href="productos.html" class="btn btn--primary btn--sm nav__cta">Ver productos <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
       </nav>
@@ -119,94 +120,8 @@
         <span class="logo__mark"><i class="ph-fill ph-cpu" aria-hidden="true"></i></span>
         <span class="logo__text">Nexora</span>
       </a>
-      <p>© 2026 Nexora Tech. Proyecto académico de demostración · Las imágenes pertenecen a Unsplash.</p>
-      <ul class="footer-links">
-        <li><a href="promociones.html">Promociones</a></li>
-        <li><a href="productos.html">Productos</a></li>
-        <li><a href="consultas.html">Consultas</a></li>
-      </ul>
     </div>
   </footer>
-
-  <!-- ============ MODAL: LOGIN / REGISTRO ============ -->
-  <dialog id="authDialog" class="modal modal--auth" aria-labelledby="authTitle" closedby="any">
-    <div class="auth">
-      <aside class="auth__visual" aria-hidden="true">
-        <div class="auth__visual-inner">
-          <span class="logo__mark"><i class="ph-fill ph-cpu"></i></span>
-          <h3>Tu setup ideal te está esperando.</h3>
-          <ul>
-            <li><i class="ph-fill ph-check-circle"></i> Guarda tu carrito</li>
-            <li><i class="ph-fill ph-check-circle"></i> Compra con pago seguro</li>
-            <li><i class="ph-fill ph-check-circle"></i> Ofertas exclusivas</li>
-          </ul>
-        </div>
-      </aside>
-
-      <div class="auth__panel">
-        <button type="button" class="icon-btn icon-btn--soft modal__close" data-close aria-label="Cerrar"><i class="ph ph-x" aria-hidden="true"></i></button>
-        <h2 id="authTitle">Bienvenido a Nexora</h2>
-
-        <!-- Vista invitado -->
-        <div id="authGuest">
-          <p class="notice" id="authNotice" hidden><i class="ph-fill ph-info" aria-hidden="true"></i><span>Inicia sesión para continuar con tu compra.</span></p>
-
-          <div class="segmented" role="tablist" aria-label="Acceso">
-            <button type="button" role="tab" id="tabLogin" aria-selected="true" aria-controls="loginForm" data-tab="login">Iniciar sesión</button>
-            <button type="button" role="tab" id="tabRegister" aria-selected="false" aria-controls="registerForm" data-tab="register" tabindex="-1">Crear cuenta</button>
-          </div>
-
-          <form id="loginForm" class="form" role="tabpanel" aria-labelledby="tabLogin">
-            <div class="field">
-              <label for="lEmail">Correo electrónico</label>
-              <input type="email" id="lEmail" autocomplete="email" required maxlength="120" placeholder="tu@correo.com" autofocus>
-            </div>
-            <div class="field">
-              <label for="lPass">Contraseña</label>
-              <div class="password">
-                <input type="password" id="lPass" autocomplete="current-password" required minlength="6" maxlength="64" placeholder="Mínimo 6 caracteres">
-                <button type="button" class="pw-toggle" aria-label="Mostrar contraseña" data-pw="lPass"><i class="ph ph-eye" aria-hidden="true"></i></button>
-              </div>
-            </div>
-            <button type="submit" class="btn btn--primary btn--lg btn--block">Ingresar</button>
-          </form>
-
-          <form id="registerForm" class="form" role="tabpanel" aria-labelledby="tabRegister" hidden>
-            <div class="field">
-              <label for="rName">Nombre completo</label>
-              <input type="text" id="rName" autocomplete="name" required minlength="2" maxlength="60" placeholder="Tu nombre">
-            </div>
-            <div class="field">
-              <label for="rEmail">Correo electrónico</label>
-              <input type="email" id="rEmail" autocomplete="email" required maxlength="120" placeholder="tu@correo.com">
-            </div>
-            <div class="field">
-              <label for="rPass">Contraseña</label>
-              <div class="password">
-                <input type="password" id="rPass" autocomplete="new-password" required minlength="6" maxlength="64" placeholder="Mínimo 6 caracteres">
-                <button type="button" class="pw-toggle" aria-label="Mostrar contraseña" data-pw="rPass"><i class="ph ph-eye" aria-hidden="true"></i></button>
-              </div>
-            </div>
-            <label class="check-row"><input type="checkbox" class="checkbox" required> <span>Acepto los términos y la política de privacidad.</span></label>
-            <button type="submit" class="btn btn--primary btn--lg btn--block">Crear mi cuenta</button>
-          </form>
-          <p class="fineprint"><i class="ph ph-lock-key" aria-hidden="true"></i> Demo académica: la sesión se simula en tu navegador y no se envían contraseñas.</p>
-        </div>
-
-        <!-- Vista sesión iniciada -->
-        <div id="authUser" hidden>
-          <div class="user-card">
-            <span class="avatar" id="userAvatar">U</span>
-            <div><strong id="userName">Usuario</strong><p id="userEmail"></p></div>
-          </div>
-          <div class="user-actions">
-            <button type="button" class="btn btn--primary btn--block" id="userCartBtn"><i class="ph ph-shopping-cart-simple" aria-hidden="true"></i> Ver mi carrito</button>
-            <button type="button" class="btn btn--ghost btn--block" id="logoutBtn"><i class="ph ph-sign-out" aria-hidden="true"></i> Cerrar sesión</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </dialog>
 
   <!-- ============ PANEL LATERAL: CARRITO ============ -->
   <dialog id="cartDialog" class="modal drawer" aria-labelledby="cartTitle" closedby="any">
