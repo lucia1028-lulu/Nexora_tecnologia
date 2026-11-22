@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedidos · Nexora Admin</title>
+  <meta name="theme-color" content="#F8FAFC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/pedidos.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Saltar al contenido</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+    <div class="app__main">
+      <header class="topbar" id="topbar"></header>
+      <main class="content" id="content" tabindex="-1">
+
+        <header class="page-head">
+          <div>
+            <h1>Pedidos</h1>
+            <p>Seguimiento de órdenes web y ventas de caja, con estados de envío.</p>
+          </div>
+          <div class="page-head__actions">
+            <button type="button" class="btn btn--ghost" id="exportOrders"><i class="ph ph-download-simple" aria-hidden="true"></i> Exportar CSV</button>
+            <button type="button" class="btn btn--primary" id="simulateOrder" data-perm="create"><i class="ph ph-sparkle" aria-hidden="true"></i> Simular pedido web</button>
+          </div>
+        </header>
+
+        <section class="status-strip" id="statusStrip" aria-label="Filtrar por estado"></section>
+
+        <section class="card card--flush">
+          <div class="toolbar">
+            <div class="search"><i class="ph ph-magnifying-glass" aria-hidden="true"></i><input type="search" id="oSearch" placeholder="Buscar por N° de pedido, cliente o producto…" aria-label="Buscar pedido" autocomplete="off"></div>
+            <select class="input" id="oChannel" aria-label="Canal">
+              <option value="">Todos los canales</option><option value="web">Web</option><option value="caja">Caja</option>
+            </select>
+            <label class="toolbar__date"><span>Desde</span><input type="date" class="input" id="oFrom"></label>
+            <label class="toolbar__date"><span>Hasta</span><input type="date" class="input" id="oTo"></label>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>N° pedido</th><th>Cliente</th><th>Fecha</th><th>Canal</th><th>Productos</th><th class="num">Total</th><th>Pago</th><th>Estado</th><th class="col-actions">Acciones</th></tr></thead>
+              <tbody id="orderRows"></tbody>
+            </table>
+          </div>
+          <div class="pager" id="oPager"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Detalle del pedido -->
+  <dialog id="orderDialog" class="modal modal--lg" aria-labelledby="odTitle" data-lightdismiss>
+    <div class="modal__form" id="orderPanel"></div>
+  </dialog>
+
+  <script type="module" src="js/pedidos.js"></script>
+</body>
+</html>

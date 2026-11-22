@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventario · Nexora Admin</title>
+  <meta name="theme-color" content="#F8FAFC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/inventario.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Saltar al contenido</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+    <div class="app__main">
+      <header class="topbar" id="topbar"></header>
+      <main class="content" id="content" tabindex="-1">
+
+        <header class="page-head">
+          <div>
+            <h1>Inventario</h1>
+            <p>Control de stock, alertas de reposición y kardex en tiempo real.</p>
+          </div>
+          <div class="page-head__actions">
+            <button type="button" class="btn btn--ghost" id="exportKardex"><i class="ph ph-download-simple" aria-hidden="true"></i> Exportar kardex</button>
+            <button type="button" class="btn btn--primary" id="newMove" data-perm="create"><i class="ph ph-plus-circle" aria-hidden="true"></i> Registrar movimiento</button>
+          </div>
+        </header>
+
+        <section class="inv-stats" id="invStats" aria-label="Resumen del inventario"></section>
+
+        <div class="tabs" role="tablist" aria-label="Vistas de inventario" id="invTabs">
+          <button type="button" role="tab" id="tab-stock" aria-selected="true" aria-controls="panel-stock" data-tab="stock"><i class="ph ph-stack" aria-hidden="true"></i> Stock</button>
+          <button type="button" role="tab" id="tab-kardex" aria-selected="false" aria-controls="panel-kardex" data-tab="kardex" tabindex="-1"><i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i> Kardex</button>
+          <button type="button" role="tab" id="tab-alertas" aria-selected="false" aria-controls="panel-alertas" data-tab="alertas" tabindex="-1"><i class="ph ph-bell-ringing" aria-hidden="true"></i> Alertas <span class="badge badge--danger" id="alertCount">0</span></button>
+        </div>
+
+        <!-- STOCK -->
+        <section class="card card--flush" id="panel-stock" role="tabpanel" aria-labelledby="tab-stock">
+          <div class="toolbar">
+            <div class="search"><i class="ph ph-magnifying-glass" aria-hidden="true"></i><input type="search" id="sSearch" placeholder="Buscar por nombre, SKU o marca…" aria-label="Buscar producto" autocomplete="off"></div>
+            <select class="input" id="sCategory" aria-label="Categoría"></select>
+            <select class="input" id="sLevel" aria-label="Nivel de stock">
+              <option value="">Todos los niveles</option>
+              <option value="ok">Óptimo</option>
+              <option value="low">Stock bajo</option>
+              <option value="critical">Crítico</option>
+              <option value="out">Agotado</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Producto</th><th>Categoría</th><th class="num">Stock</th><th class="num">Mínimo</th><th>Nivel</th><th>Estado</th><th class="num">Valor (costo)</th><th class="col-actions">Acciones</th></tr></thead>
+              <tbody id="stockRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- KARDEX -->
+        <section class="card card--flush" id="panel-kardex" role="tabpanel" aria-labelledby="tab-kardex" hidden>
+          <div class="toolbar">
+            <select class="input kx-product" id="kProduct" aria-label="Producto"></select>
+            <select class="input" id="kType" aria-label="Tipo de movimiento">
+              <option value="">Todos los tipos</option><option>Entrada</option><option>Salida</option><option>Ajuste</option>
+            </select>
+            <label class="toolbar__date"><span>Desde</span><input type="date" class="input" id="kFrom"></label>
+            <label class="toolbar__date"><span>Hasta</span><input type="date" class="input" id="kTo"></label>
+            <button type="button" class="btn btn--ghost btn--sm" id="kClear"><i class="ph ph-x" aria-hidden="true"></i> Limpiar</button>
+          </div>
+          <div class="kx-summary" id="kSummary" hidden></div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th>Motivo</th><th>Referencia</th><th class="num">Entrada</th><th class="num">Salida</th><th class="num">Saldo</th><th>Usuario</th></tr></thead>
+              <tbody id="kardexRows"></tbody>
+            </table>
+          </div>
+          <div class="pager" id="kPager"></div>
+        </section>
+
+        <!-- ALERTAS -->
+        <section id="panel-alertas" role="tabpanel" aria-labelledby="tab-alertas" hidden>
+          <div class="alert-grid" id="alertList"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: registrar movimiento -->
+  <dialog id="moveDialog" class="modal" aria-labelledby="moveTitle">
+    <form id="moveForm" class="modal__form">
+      <div class="modal__head">
+        <div><h2 id="moveTitle">Registrar movimiento</h2><p>Se actualizará el stock y el kardex al instante.</p></div>
+        <button type="button" class="icon-btn" data-close aria-label="Cerrar"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal__body">
+        <div class="field">
+          <span class="field__label">Tipo de movimiento</span>
+          <div class="segmented segmented--full" role="radiogroup" aria-label="Tipo de movimiento">
+            <label><input type="radio" name="type" value="Entrada" checked><i class="ph ph-arrow-down-left" aria-hidden="true"></i> Entrada</label>
+            <label><input type="radio" name="type" value="Salida"><i class="ph ph-arrow-up-right" aria-hidden="true"></i> Salida</label>
+            <label><input type="radio" name="type" value="Ajuste"><i class="ph ph-sliders" aria-hidden="true"></i> Ajuste</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="mProduct">Producto <span class="req">*</span></label>
+          <select id="mProduct" required></select>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="mQty" id="mQtyLabel">Cantidad <span class="req">*</span></label>
+            <input type="number" id="mQty" min="1" step="1" inputmode="numeric" required>
+          </div>
+          <div class="field">
+            <label for="mReason">Motivo <span class="req">*</span></label>
+            <select id="mReason" required></select>
+          </div>
+          <div class="field field--full">
+            <label for="mRef">Referencia</label>
+            <input type="text" id="mRef" maxlength="40" placeholder="N° de guía, orden de compra o factura">
+          </div>
+          <div class="field field--full">
+            <label for="mNote">Notas</label>
+            <textarea id="mNote" maxlength="200" rows="2" placeholder="Detalle opcional del movimiento"></textarea>
+          </div>
+        </div>
+        <div class="move-preview" id="movePreview" aria-live="polite"></div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn--ghost" data-close>Cancelar</button>
+        <button type="submit" class="btn btn--primary"><i class="ph ph-check" aria-hidden="true"></i> Registrar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/inventario.js"></script>
+</body>
+</html>

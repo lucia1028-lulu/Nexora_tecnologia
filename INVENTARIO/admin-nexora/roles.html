@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roles y permisos · Nexora Admin</title>
+  <meta name="theme-color" content="#F8FAFC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/roles.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Saltar al contenido</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+    <div class="app__main">
+      <header class="topbar" id="topbar"></header>
+      <main class="content" id="content" tabindex="-1">
+
+        <header class="page-head">
+          <div>
+            <h1>Roles y permisos</h1>
+            <p>Define qué puede ver y hacer cada rol en cada módulo del panel.</p>
+          </div>
+          <div class="page-head__actions">
+            <button type="button" class="btn btn--primary" id="newRole" data-perm="create"><i class="ph ph-plus-circle" aria-hidden="true"></i> Nuevo rol</button>
+          </div>
+        </header>
+
+        <div class="roles-layout">
+          <aside class="card roles-list" aria-label="Lista de roles">
+            <div class="card__head"><div><h2>Roles</h2><p id="rolesCount"></p></div></div>
+            <ul id="roleList" class="roles-list__items"></ul>
+          </aside>
+
+          <section class="card" aria-labelledby="roleName" id="matrixCard">
+            <div class="card__head role-head">
+              <div>
+                <h2 id="roleName">—</h2>
+                <p id="roleDesc"></p>
+              </div>
+              <div class="role-head__actions">
+                <button type="button" class="btn btn--ghost btn--sm" id="editRole" data-perm="edit"><i class="ph ph-pencil-simple" aria-hidden="true"></i> Editar</button>
+                <button type="button" class="btn btn--danger-ghost btn--sm" id="deleteRole" data-perm="delete"><i class="ph ph-trash" aria-hidden="true"></i> Eliminar</button>
+              </div>
+            </div>
+            <div class="card__body">
+              <div class="banner banner--info" id="roleNote" hidden></div>
+              <div class="table-wrap matrix-wrap"><table class="table matrix" id="matrix"></table></div>
+            </div>
+            <div class="matrix-foot" id="matrixFoot" hidden>
+              <span id="dirtyMsg"><i class="ph-fill ph-warning-circle" aria-hidden="true"></i> Tienes cambios sin guardar</span>
+              <div>
+                <button type="button" class="btn btn--ghost" id="discard">Descartar</button>
+                <button type="button" class="btn btn--primary" id="savePerms"><i class="ph ph-floppy-disk" aria-hidden="true"></i> Guardar permisos</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: crear / editar rol -->
+  <dialog id="roleDialog" class="modal modal--sm" aria-labelledby="rdTitle">
+    <form id="roleForm" class="modal__form">
+      <div class="modal__head">
+        <div><h2 id="rdTitle">Nuevo rol</h2></div>
+        <button type="button" class="icon-btn" data-close aria-label="Cerrar"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal__body">
+        <div class="field">
+          <label for="rName">Nombre del rol <span class="req">*</span></label>
+          <input type="text" id="rName" required minlength="3" maxlength="30" autocomplete="off" placeholder="Ej. Supervisor de tienda">
+          <span class="hint" id="rNameHint"></span>
+        </div>
+        <div class="field">
+          <label for="rDesc">Descripción</label>
+          <textarea id="rDesc" rows="2" maxlength="120" placeholder="¿Qué responsabilidades tiene este rol?"></textarea>
+        </div>
+        <div class="field" id="copyField">
+          <label for="rCopy">Copiar permisos de</label>
+          <select id="rCopy"></select>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn--ghost" data-close>Cancelar</button>
+        <button type="submit" class="btn btn--primary"><span id="rdSave">Crear rol</span></button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/roles.js"></script>
+</body>
+</html>

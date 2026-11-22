@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resumen · Nexora Admin</title>
+  <meta name="theme-color" content="#F8FAFC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/resumen.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Saltar al contenido</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+    <div class="app__main">
+      <header class="topbar" id="topbar"></header>
+      <main class="content" id="content" tabindex="-1">
+
+        <header class="page-head">
+          <div>
+            <h1>Resumen</h1>
+            <p id="greeting">Cargando…</p>
+          </div>
+          <div class="page-head__actions">
+            <a class="btn btn--ghost" href="reportes.html" data-perm="reportes:view"><i class="ph ph-chart-bar" aria-hidden="true"></i> Ver reportes</a>
+            <a class="btn btn--primary" href="caja.html" data-perm="caja:view"><i class="ph ph-receipt" aria-hidden="true"></i> Nueva venta</a>
+          </div>
+        </header>
+
+        <section class="kpis" id="kpis" aria-label="Indicadores clave"></section>
+
+        <section class="res-grid">
+          <article class="card">
+            <div class="card__head">
+              <div><h2>Ventas por día</h2><p id="chartSummary">Evolución de ingresos</p></div>
+              <div class="segmented" role="group" aria-label="Rango del gráfico" id="rangeSwitch">
+                <button type="button" data-range="7" aria-pressed="false">7 días</button>
+                <button type="button" data-range="15" aria-pressed="false">15 días</button>
+                <button type="button" data-range="30" aria-pressed="true">30 días</button>
+              </div>
+            </div>
+            <div class="card__body"><div id="salesChart"></div></div>
+          </article>
+
+          <article class="card">
+            <div class="card__head"><div><h2>Ventas por categoría</h2><p>Últimos 30 días</p></div></div>
+            <div class="card__body"><div id="catDonut"></div></div>
+          </article>
+        </section>
+
+        <section class="res-grid res-grid--3">
+          <article class="card">
+            <div class="card__head"><div><h2>Más vendidos</h2><p>Unidades en el mes</p></div></div>
+            <div class="card__body"><ol class="rank" id="topProducts"></ol></div>
+          </article>
+
+          <article class="card">
+            <div class="card__head">
+              <div><h2>Últimos movimientos</h2><p>Kardex en tiempo real</p></div>
+              <a class="link" href="inventario.html" data-perm="inventario:view">Ver todo</a>
+            </div>
+            <div class="card__body"><ul class="feed" id="lastMovements"></ul></div>
+          </article>
+
+          <article class="card">
+            <div class="card__head">
+              <div><h2>Promociones vigentes</h2><p>Aplicadas en caja y tienda</p></div>
+              <a class="link" href="promociones.html" data-perm="promociones:view">Gestionar</a>
+            </div>
+            <div class="card__body"><ul class="promo-list" id="activePromos"></ul></div>
+          </article>
+        </section>
+
+        <article class="card card--flush">
+          <div class="card__head" style="padding-bottom:1rem">
+            <div><h2>Pedidos recientes</h2><p>Web y ventas de caja</p></div>
+            <a class="link" href="pedidos.html" data-perm="pedidos:view">Ver pedidos</a>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>N° pedido</th><th>Cliente</th><th>Canal</th><th>Fecha</th><th class="num">Total</th><th>Estado</th></tr></thead>
+              <tbody id="recentOrders"></tbody>
+            </table>
+          </div>
+        </article>
+
+      </main>
+    </div>
+  </div>
+  <script type="module" src="js/resumen.js"></script>
+</body>
+</html>

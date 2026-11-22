@@ -1,0 +1,81 @@
+/* NEXORA ADMIN · pedidos.css — seguimiento de órdenes y estados de envío */
+
+.status-strip { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .75rem; margin-bottom: 1.25rem; }
+.status-chip {
+  display: grid; gap: .1rem; padding: .85rem 1rem; text-align: left; background: var(--card); border: 1.5px solid var(--border);
+  border-radius: var(--r-md); box-shadow: var(--shadow-xs); transition: transform .25s var(--ease), border-color .2s, box-shadow .2s;
+}
+.status-chip:hover { transform: translateY(-2px); border-color: #C7D2FE; }
+.status-chip[aria-pressed="true"] { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, .12); }
+.status-chip span { display: flex; align-items: center; gap: .4rem; font-size: .76rem; font-weight: 700; color: var(--muted); }
+.status-chip span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--dot, var(--faint)); }
+.status-chip b { font-size: 1.45rem; font-weight: 800; letter-spacing: -.03em; }
+.status-chip[data-status="Pendiente"] { --dot: var(--warning); }
+.status-chip[data-status="Procesando"] { --dot: var(--info); }
+.status-chip[data-status="Enviado"] { --dot: var(--accent); }
+.status-chip[data-status="Entregado"] { --dot: var(--success); }
+.status-chip[data-status="Cancelado"] { --dot: var(--danger); }
+.toolbar__date { display: inline-flex; align-items: center; gap: .5rem; font-size: .8rem; font-weight: 700; color: var(--muted); }
+.order-products { display: grid; line-height: 1.3; }
+.order-products small { color: var(--muted); }
+
+/* Detalle */
+.od-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid var(--border-soft); }
+.od-head h2 { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; font-size: 1.3rem; font-weight: 800; }
+.od-head p { font-size: .84rem; color: var(--muted); margin-top: .15rem; }
+.od-body { padding: 1.25rem 1.5rem; overflow-y: auto; display: grid; gap: 1.25rem; overscroll-behavior: contain; }
+.od-foot { padding: 1rem 1.5rem; border-top: 1px solid var(--border-soft); background: #FBFBFE; display: grid; gap: .9rem; }
+.od-foot__row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .6rem; }
+
+.stepper { display: grid; grid-template-columns: repeat(4, 1fr); counter-reset: step; }
+.stepper li { position: relative; display: grid; justify-items: center; gap: .45rem; text-align: center; font-size: .8rem; font-weight: 700; color: var(--faint); }
+.stepper li::before { content: ""; position: absolute; top: 17px; left: calc(-50% + 20px); right: calc(50% + 20px); height: 3px; border-radius: 3px; background: var(--border); }
+.stepper li:first-child::before { display: none; }
+.stepper__dot { position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #fff; border: 2px solid var(--border); font-size: 1.05rem; color: var(--faint); transition: all .3s var(--ease); }
+.stepper li.is-done { color: var(--text-2); }
+.stepper li.is-done::before, .stepper li.is-current::before { background: var(--grad); }
+.stepper li.is-done .stepper__dot { background: var(--grad); border-color: transparent; color: #fff; }
+.stepper li.is-current { color: var(--primary-600); }
+.stepper li.is-current .stepper__dot { border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 5px rgba(79, 70, 229, .14); }
+
+.banner { display: flex; align-items: center; gap: .7rem; padding: .85rem 1rem; border-radius: 14px; font-size: .88rem; font-weight: 600; }
+.banner i { font-size: 1.3rem; }
+.banner--danger { background: var(--danger-bg); color: var(--danger-ink); }
+.banner--info { background: var(--primary-50); color: var(--primary-600); }
+
+.od-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.info-card { padding: 1rem 1.1rem; border: 1px solid var(--border); border-radius: var(--r-md); background: #fff; }
+.info-card h3 { display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem; font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.info-card h3 i { color: var(--primary); font-size: 1.1rem; }
+.info-card dl { display: grid; gap: .35rem; font-size: .88rem; }
+.info-card dl div { display: flex; justify-content: space-between; gap: 1rem; }
+.info-card dt { color: var(--muted); }
+.info-card dd { font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+
+.od-items { border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; }
+.od-items .table th { position: static; }
+.od-totals { justify-self: end; width: min(340px, 100%); display: grid; gap: .45rem; font-size: .9rem; }
+.od-totals div { display: flex; justify-content: space-between; color: var(--text-2); }
+.od-totals .grand { padding-top: .6rem; border-top: 1px dashed var(--border); font-size: 1.15rem; font-weight: 800; color: var(--text); }
+.od-totals .grand b { font-size: 1.4rem; letter-spacing: -.03em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.timeline { display: grid; gap: .9rem; padding-left: .3rem; }
+.timeline li { position: relative; display: grid; gap: .1rem; padding-left: 1.4rem; font-size: .86rem; }
+.timeline li::before { content: ""; position: absolute; left: 0; top: .35rem; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 4px var(--primary-50); }
+.timeline li::after { content: ""; position: absolute; left: 4px; top: 1.1rem; bottom: -1rem; width: 2px; background: var(--border); }
+.timeline li:last-child::after { display: none; }
+.timeline small { color: var(--muted); }
+.od-section-title { font-size: .95rem; font-weight: 800; margin-bottom: .6rem; }
+
+.ship-form { display: grid; grid-template-columns: 1fr 1.4fr; gap: .75rem; padding: .9rem 1rem; border-radius: 14px; background: var(--purple-bg); border: 1px solid #DDD6FE; }
+.ship-form .field--full { grid-column: 1 / -1; }
+
+@media (max-width: 1180px) { .status-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 720px) {
+  .status-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .od-grid, .ship-form { grid-template-columns: minmax(0, 1fr); }
+  .od-head, .od-body, .od-foot { padding-inline: 1.1rem; }
+  .stepper li { font-size: .7rem; }
+  .toolbar__date { flex: 1 1 140px; }
+  .toolbar__date input { flex: 1; }
+}

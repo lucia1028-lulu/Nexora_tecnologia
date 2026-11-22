@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Productos · Nexora Admin</title>
+  <meta name="theme-color" content="#F8FAFC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/productos.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Saltar al contenido</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+    <div class="app__main">
+      <header class="topbar" id="topbar"></header>
+      <main class="content" id="content" tabindex="-1">
+
+        <header class="page-head">
+          <div>
+            <h1>Productos</h1>
+            <p>Catálogo de laptops, PCs, componentes, monitores y periféricos.</p>
+          </div>
+          <div class="page-head__actions">
+            <button type="button" class="btn btn--primary" id="newProduct" data-perm="create"><i class="ph ph-plus-circle" aria-hidden="true"></i> Nuevo producto</button>
+          </div>
+        </header>
+
+        <section class="card">
+          <div class="toolbar">
+            <div class="search"><i class="ph ph-magnifying-glass" aria-hidden="true"></i><input type="search" id="fSearch" placeholder="Buscar por nombre, SKU, marca o especificación…" aria-label="Buscar producto" autocomplete="off"></div>
+            <select class="input" id="fCategory" aria-label="Categoría"></select>
+            <select class="input" id="fBrand" aria-label="Marca"></select>
+            <select class="input" id="fStatus" aria-label="Estado">
+              <option value="">Todos los estados</option><option>Activo</option><option>Inactivo</option>
+            </select>
+            <div class="segmented" role="group" aria-label="Tipo de vista">
+              <button type="button" data-view="grid" aria-pressed="true" aria-label="Vista de tarjetas"><i class="ph ph-squares-four" aria-hidden="true"></i></button>
+              <button type="button" data-view="table" aria-pressed="false" aria-label="Vista de tabla"><i class="ph ph-list-bullets" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </section>
+
+        <p class="results" id="results" aria-live="polite"></p>
+
+        <section id="gridView" class="p-grid" aria-label="Catálogo de productos"></section>
+
+        <section id="tableView" class="card card--flush" hidden>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Producto</th><th>Categoría</th><th class="num">Precio</th><th class="num">Costo</th><th class="num">Margen</th><th class="num">Stock</th><th>Estado</th><th class="col-actions">Acciones</th></tr></thead>
+              <tbody id="tableRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: crear / editar producto -->
+  <dialog id="productDialog" class="modal modal--lg" aria-labelledby="pdTitle">
+    <form id="productForm" class="modal__form">
+      <div class="modal__head">
+        <div><h2 id="pdTitle">Nuevo producto</h2><p id="pdSub">Completa los datos comerciales y técnicos.</p></div>
+        <button type="button" class="icon-btn" data-close aria-label="Cerrar"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal__body">
+        <div class="pf">
+          <div class="pf__main">
+            <div class="form-grid">
+              <div class="field field--full">
+                <label for="pName">Nombre del producto <span class="req">*</span></label>
+                <input type="text" id="pName" required maxlength="90" placeholder="Ej. ASUS ROG Zephyrus G14">
+              </div>
+              <div class="field">
+                <label for="pCategory">Categoría <span class="req">*</span></label>
+                <select id="pCategory" required></select>
+              </div>
+              <div class="field">
+                <label for="pBrand">Marca <span class="req">*</span></label>
+                <input type="text" id="pBrand" required maxlength="40" list="brandList" placeholder="Ej. ASUS">
+                <datalist id="brandList"></datalist>
+              </div>
+              <div class="field">
+                <label for="pSku">SKU <span class="req">*</span></label>
+                <input type="text" id="pSku" required maxlength="20" pattern="[A-Za-z0-9\-]{3,20}" placeholder="LAP-0001" autocapitalize="characters">
+                <span class="hint" id="skuHint">Código único del producto.</span>
+              </div>
+              <div class="field">
+                <label for="pStatus">Estado</label>
+                <select id="pStatus"><option>Activo</option><option>Inactivo</option></select>
+              </div>
+              <div class="field">
+                <label for="pPrice">Precio de venta (con IGV) <span class="req">*</span></label>
+                <div class="input-prefix"><span>S/</span><input type="number" id="pPrice" required min="0.01" max="999999" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="pCost">Costo de compra <span class="req">*</span></label>
+                <div class="input-prefix"><span>S/</span><input type="number" id="pCost" required min="0" max="999999" step="0.01" inputmode="decimal"></div>
+                <span class="hint" id="marginHint"></span>
+              </div>
+              <div class="field">
+                <label for="pStock" id="pStockLabel">Stock inicial</label>
+                <input type="number" id="pStock" min="0" max="99999" step="1" value="0" inputmode="numeric">
+                <span class="hint" id="stockHint"></span>
+              </div>
+              <div class="field">
+                <label for="pMin">Stock mínimo <span class="req">*</span></label>
+                <input type="number" id="pMin" required min="0" max="99999" step="1" value="3" inputmode="numeric">
+                <span class="hint">Genera alertas al llegar a este nivel.</span>
+              </div>
+              <div class="field field--full">
+                <label for="pImage">URL de imagen</label>
+                <input type="url" id="pImage" maxlength="400" placeholder="https://images.unsplash.com/…">
+              </div>
+              <div class="field field--full">
+                <label for="pDesc">Descripción</label>
+                <textarea id="pDesc" rows="2" maxlength="300" placeholder="Resumen comercial del producto"></textarea>
+              </div>
+            </div>
+          </div>
+          <aside class="pf__side">
+            <div class="pf__preview"><img id="pImgPrev" alt="Vista previa del producto" width="480" height="360"></div>
+            <fieldset class="specs">
+              <legend><i class="ph ph-cpu" aria-hidden="true"></i> Especificaciones técnicas</legend>
+              <div class="specs__grid" id="specFields"></div>
+            </fieldset>
+          </aside>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn--ghost" data-close>Cancelar</button>
+        <button type="submit" class="btn btn--primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i> <span id="pdSave">Guardar producto</span></button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/productos.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+/* NEXORA ADMIN · usuarios.css — gestión de clientes y personal */
+
+.user-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .9rem; margin-bottom: 1.25rem; }
+.user-stat { display: grid; gap: .1rem; padding: 1rem 1.15rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: var(--shadow-xs); }
+.user-stat span { font-size: .76rem; font-weight: 600; color: var(--muted); }
+.user-stat b { font-size: 1.45rem; font-weight: 800; letter-spacing: -.03em; }
+.user-stat small { font-size: .74rem; color: var(--faint); }
+
+.cell-user b { font-weight: 700; }
+.you { margin-left: .4rem; }
+.spent { font-weight: 800; }
+.role-badge { cursor: default; }
+tr.is-inactive td:not(.col-actions) { opacity: .6; }
+
+@media (max-width: 960px) { .user-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .user-stats { grid-template-columns: minmax(0, 1fr); } }

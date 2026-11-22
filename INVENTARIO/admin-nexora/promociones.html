@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Promociones · Nexora Admin</title>
+  <meta name="theme-color" content="#F8FAFC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/promociones.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Saltar al contenido</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+    <div class="app__main">
+      <header class="topbar" id="topbar"></header>
+      <main class="content" id="content" tabindex="-1">
+
+        <header class="page-head">
+          <div>
+            <h1>Promociones</h1>
+            <p>Campañas, cupones y descuentos por porcentaje o monto con fechas de vigencia.</p>
+          </div>
+          <div class="page-head__actions">
+            <button type="button" class="btn btn--primary" id="newPromo" data-perm="create"><i class="ph ph-plus-circle" aria-hidden="true"></i> Nueva promoción</button>
+          </div>
+        </header>
+
+        <section class="promo-stats" id="promoStats" aria-label="Resumen de promociones"></section>
+
+        <div class="tabs" role="group" aria-label="Filtrar por estado" id="statusTabs"></div>
+
+        <section class="promo-grid" id="promoGrid" aria-live="polite"></section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: crear / editar promoción -->
+  <dialog id="promoDialog" class="modal modal--lg" aria-labelledby="prTitle">
+    <form id="promoForm" class="modal__form">
+      <div class="modal__head">
+        <div><h2 id="prTitle">Nueva promoción</h2><p>Las promociones sin cupón se aplican automáticamente en caja.</p></div>
+        <button type="button" class="icon-btn" data-close aria-label="Cerrar"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal__body">
+        <div class="form-grid">
+          <div class="field field--full">
+            <label for="prName">Nombre de la campaña <span class="req">*</span></label>
+            <input type="text" id="prName" required maxlength="60" placeholder="Ej. Semana Gamer">
+          </div>
+          <div class="field field--full">
+            <label for="prDesc">Descripción</label>
+            <input type="text" id="prDesc" maxlength="140" placeholder="Texto breve para el equipo de ventas">
+          </div>
+
+          <div class="field">
+            <span class="field__label">Tipo de descuento</span>
+            <div class="segmented segmented--full" role="radiogroup" aria-label="Tipo de descuento">
+              <label><input type="radio" name="prType" value="percent" checked><i class="ph ph-percent" aria-hidden="true"></i> Porcentaje</label>
+              <label><input type="radio" name="prType" value="amount"><i class="ph ph-currency-circle-dollar" aria-hidden="true"></i> Monto fijo</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="prValue" id="prValueLabel">Descuento (%) <span class="req">*</span></label>
+            <input type="number" id="prValue" required min="1" max="90" step="1" inputmode="decimal">
+            <span class="hint" id="prValueHint">Entre 1 % y 90 %.</span>
+          </div>
+
+          <div class="field">
+            <label for="prScope">Aplica a</label>
+            <select id="prScope">
+              <option value="all">Toda la tienda</option>
+              <option value="category">Una categoría</option>
+              <option value="products">Productos específicos</option>
+            </select>
+          </div>
+          <div class="field" id="catField" hidden>
+            <label for="prCategory">Categoría</label>
+            <select id="prCategory"></select>
+          </div>
+
+          <div class="field field--full" id="prodField" hidden>
+            <span class="field__label">Productos incluidos</span>
+            <div class="picker">
+              <div class="search"><i class="ph ph-magnifying-glass" aria-hidden="true"></i><input type="search" id="pickSearch" placeholder="Filtrar productos…" aria-label="Filtrar productos"></div>
+              <div class="picker__list" id="pickList" role="group" aria-label="Productos"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="prCode">Cupón (opcional)</label>
+            <input type="text" id="prCode" maxlength="16" pattern="[A-Za-z0-9]{4,16}" placeholder="NEXORA10" autocapitalize="characters" autocomplete="off">
+            <span class="hint" id="prCodeHint">Sin cupón = descuento automático.</span>
+          </div>
+          <div class="field">
+            <span class="field__label">Estado</span>
+            <label class="check check--switch"><span class="switch"><input type="checkbox" id="prActive" checked><span></span></span> Promoción activa</label>
+          </div>
+
+          <div class="field">
+            <label for="prStart">Inicio <span class="req">*</span></label>
+            <input type="date" id="prStart" required>
+          </div>
+          <div class="field">
+            <label for="prEnd">Fin <span class="req">*</span></label>
+            <input type="date" id="prEnd" required>
+          </div>
+        </div>
+        <div class="affect" id="affectInfo" aria-live="polite"></div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn--ghost" data-close>Cancelar</button>
+        <button type="submit" class="btn btn--primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i> <span id="prSave">Guardar promoción</span></button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/promociones.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+/* NEXORA ADMIN · inventario.css — control de stock, alertas y movimientos */
+
+.inv-stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .9rem; margin-bottom: 1.25rem; }
+.inv-stat { display: grid; gap: .15rem; padding: 1rem 1.1rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: var(--shadow-xs); }
+.inv-stat span { font-size: .76rem; font-weight: 600; color: var(--muted); }
+.inv-stat b { font-size: 1.35rem; font-weight: 800; letter-spacing: -.03em; }
+.inv-stat--danger { border-color: #FECDD3; background: linear-gradient(180deg, #fff, var(--danger-bg)); }
+.inv-stat--danger b { color: var(--danger-ink); }
+.inv-stat--warning { border-color: #FDE68A; background: linear-gradient(180deg, #fff, var(--warning-bg)); }
+.inv-stat--warning b { color: var(--warning-ink); }
+
+#panel-stock, #panel-kardex, #panel-alertas { margin-top: 1rem; }
+
+.level { display: grid; gap: .3rem; min-width: 110px; }
+.level small { font-size: .72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.stock-num { font-weight: 800; font-size: 1rem; }
+.stock-num--danger { color: var(--danger-ink); }
+.stock-num--warning { color: var(--warning-ink); }
+.row-inactive { opacity: .6; }
+
+/* Kardex */
+.toolbar__date { display: inline-flex; align-items: center; gap: .5rem; font-size: .8rem; font-weight: 700; color: var(--muted); }
+.kx-product { flex: 1 1 240px; max-width: 360px; }
+.kx-summary { display: flex; flex-wrap: wrap; gap: 1.5rem; padding: .85rem 1.35rem; background: var(--primary-50); border-block: 1px solid #E0E7FF; font-size: .86rem; color: var(--text-2); }
+.kx-summary b { color: var(--primary-600); }
+.qty-in { color: var(--success-ink); font-weight: 800; }
+.qty-out { color: var(--danger-ink); font-weight: 800; }
+.balance { font-weight: 800; }
+
+/* Alertas */
+.alert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+.alert-card { display: grid; gap: .9rem; padding: 1.15rem; background: var(--card); border: 1px solid var(--border); border-left: 5px solid var(--warning); border-radius: var(--r-md); box-shadow: var(--shadow-sm); }
+.alert-card--danger { border-left-color: var(--danger); }
+.alert-card__top { display: flex; gap: .85rem; align-items: center; }
+.alert-card__top img { width: 56px; height: 56px; border-radius: 14px; object-fit: cover; background: var(--primary-50); }
+.alert-card__top div { display: grid; min-width: 0; line-height: 1.3; flex: 1; }
+.alert-card__top b { font-size: .92rem; }
+.alert-card__top small { color: var(--muted); font-size: .76rem; }
+.alert-card__nums { display: flex; justify-content: space-between; gap: 1rem; font-size: .8rem; color: var(--muted); }
+.alert-card__nums b { display: block; font-size: 1.15rem; color: var(--text); }
+.alert-card__suggest { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-top: .85rem; border-top: 1px dashed var(--border); font-size: .82rem; }
+.alert-card__suggest span { color: var(--text-2); }
+
+/* Modal de movimiento */
+.segmented--full { display: grid; grid-template-columns: repeat(3, 1fr); }
+.segmented--full label { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; padding: .55rem .5rem; }
+.move-preview { display: flex; align-items: center; justify-content: center; gap: .9rem; padding: .9rem 1rem; border-radius: 14px; background: var(--primary-50); font-size: .88rem; color: var(--text-2); flex-wrap: wrap; }
+.move-preview b { font-size: 1.2rem; }
+.move-preview .arrow { color: var(--primary); font-size: 1.2rem; }
+.move-preview--error { background: var(--danger-bg); color: var(--danger-ink); }
+
+@media (max-width: 1180px) { .inv-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 720px) {
+  .inv-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .toolbar__date { flex: 1 1 140px; }
+  .toolbar__date input { flex: 1; }
+}

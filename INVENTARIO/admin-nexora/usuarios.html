@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Usuarios · Nexora Admin</title>
+  <meta name="theme-color" content="#F8FAFC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/usuarios.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Saltar al contenido</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+    <div class="app__main">
+      <header class="topbar" id="topbar"></header>
+      <main class="content" id="content" tabindex="-1">
+
+        <header class="page-head">
+          <div>
+            <h1>Usuarios</h1>
+            <p>Gestión de clientes y del personal del sistema, con asignación de roles.</p>
+          </div>
+          <div class="page-head__actions">
+            <button type="button" class="btn btn--primary" id="newUser" data-perm="create"><i class="ph ph-user-plus" aria-hidden="true"></i> <span id="newUserLabel">Nuevo usuario</span></button>
+          </div>
+        </header>
+
+        <section class="user-stats" id="userStats" aria-label="Resumen de usuarios"></section>
+
+        <div class="tabs" role="tablist" aria-label="Tipo de usuario" id="userTabs">
+          <button type="button" role="tab" id="tab-Personal" aria-selected="true" aria-controls="usersPanel" data-tab="Personal"><i class="ph ph-identification-badge" aria-hidden="true"></i> Personal <span class="badge badge--neutral" id="cntPersonal">0</span></button>
+          <button type="button" role="tab" id="tab-Cliente" aria-selected="false" aria-controls="usersPanel" data-tab="Cliente" tabindex="-1"><i class="ph ph-users-three" aria-hidden="true"></i> Clientes <span class="badge badge--neutral" id="cntCliente">0</span></button>
+        </div>
+
+        <section class="card card--flush" id="usersPanel" role="tabpanel" style="margin-top:1rem">
+          <div class="toolbar">
+            <div class="search"><i class="ph ph-magnifying-glass" aria-hidden="true"></i><input type="search" id="uSearch" placeholder="Buscar por nombre, correo o teléfono…" aria-label="Buscar usuario" autocomplete="off"></div>
+            <select class="input" id="uRole" aria-label="Rol"></select>
+            <select class="input" id="uStatus" aria-label="Estado">
+              <option value="">Todos los estados</option><option>Activo</option><option>Inactivo</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead id="usersHead"></thead>
+              <tbody id="usersRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: crear / editar usuario -->
+  <dialog id="userDialog" class="modal" aria-labelledby="udTitle">
+    <form id="userForm" class="modal__form">
+      <div class="modal__head">
+        <div><h2 id="udTitle">Nuevo usuario</h2><p id="udSub">Completa los datos de la cuenta.</p></div>
+        <button type="button" class="icon-btn" data-close aria-label="Cerrar"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal__body">
+        <div class="form-grid">
+          <div class="field field--full">
+            <label for="uName">Nombre completo <span class="req">*</span></label>
+            <input type="text" id="uName" required minlength="3" maxlength="60" autocomplete="off" placeholder="Nombres y apellidos">
+          </div>
+          <div class="field">
+            <label for="uEmail">Correo electrónico <span class="req">*</span></label>
+            <input type="email" id="uEmail" required maxlength="100" autocomplete="off" placeholder="nombre@correo.com">
+            <span class="hint" id="emailHint"></span>
+          </div>
+          <div class="field">
+            <label for="uPhone">Teléfono</label>
+            <input type="tel" id="uPhone" maxlength="20" pattern="[0-9 +\-]{7,20}" autocomplete="off" placeholder="999 000 000">
+          </div>
+          <div class="field" id="roleField">
+            <label for="uRoleSel">Rol <span class="req">*</span></label>
+            <select id="uRoleSel"></select>
+            <span class="hint" id="roleHint"></span>
+          </div>
+          <div class="field">
+            <label for="uStatusSel">Estado</label>
+            <select id="uStatusSel"><option>Activo</option><option>Inactivo</option></select>
+          </div>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn--ghost" data-close>Cancelar</button>
+        <button type="submit" class="btn btn--primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i> <span id="udSave">Guardar</span></button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/usuarios.js"></script>
+</body>
+</html>
