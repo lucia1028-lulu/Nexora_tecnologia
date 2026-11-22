@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Promociones | Nexora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Nexora, ir al inicio"><span class="logo__mark"><i class="ph-fill ph-cpu"></i></span><span class="logo__text">Nexora</span></a>
+      <nav class="nav" id="mainNav" aria-label="Principal">
+        <ul class="nav__list">
+          <li><a href="index.html" class="nav__link">Inicio</a></li>
+          <li><a href="promociones.html" class="nav__link" aria-current="page">Promociones</a></li>
+          <li><a href="productos.html" class="nav__link">Productos</a></li>
+          <li><a href="consultas.html" class="nav__link">Consultas</a></li>
+          <li><a href="login.html" class="nav__link">Iniciar sesión</a></li>
+        </ul>
+        <a href="productos.html" class="btn btn--primary btn--sm nav__cta">Ver productos <i class="ph ph-arrow-right"></i></a>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="icon-btn" id="cartBtn" aria-label="Abrir carrito"><i class="ph ph-shopping-cart-simple"></i><span class="badge" id="cartCount" data-count="0">0</span></button>
+        <button type="button" class="icon-btn" id="profileBtn" aria-label="Perfil: iniciar sesión"><i class="ph ph-user"></i></button>
+        <button type="button" class="icon-btn menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú"><i class="ph ph-list"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="promociones" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="eyebrow">Promociones</span>
+          <h2>Promociones y Ofertas Exclusivas</h2>
+          <p>Aprovecha descuentos especiales en laptops, PCs, componentes y periféricos seleccionados.</p>
+        </header>
+
+        <form class="filters glass reveal" id="promoFilters" role="search" aria-label="Filtros de promociones">
+          <div class="filters__row">
+            <div class="field"><label for="promoCategory">Categoría</label><div class="select"><select id="promoCategory"></select><i class="ph ph-caret-down"></i></div></div>
+            <div class="field"><label for="promoDiscount">Porcentaje de descuento</label><div class="select"><select id="promoDiscount"></select><i class="ph ph-caret-down"></i></div></div>
+            <div class="field"><label for="promoBrand">Marca</label><div class="select"><select id="promoBrand"></select><i class="ph ph-caret-down"></i></div></div>
+            <button type="submit" class="btn btn--primary btn--lg filters__apply"><i class="ph ph-funnel"></i> Aplicar filtros</button>
+          </div>
+        </form>
+
+        <div class="results-bar">
+          <p id="promoResults" aria-live="polite"></p>
+          <button type="button" class="link-btn" id="clearPromoFilters"><i class="ph ph-arrow-counter-clockwise"></i> Limpiar filtros</button>
+        </div>
+        <ul class="grid" id="promoGrid" aria-label="Lista de promociones"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="logo"><span class="logo__mark"><i class="ph-fill ph-cpu"></i></span><span class="logo__text">Nexora</span></a>
+      <p>© 2026 Nexora Tech. Proyecto académico de demostración.</p>
+      <ul class="footer-links"><li><a href="promociones.html">Promociones</a></li><li><a href="productos.html">Productos</a></li><li><a href="consultas.html">Consultas</a></li></ul>
+    </div>
+  </footer>
+
+  <dialog id="cartDialog" class="modal drawer" aria-labelledby="cartTitle" closedby="any">
+    <div class="drawer__inner">
+      <header class="drawer__head"><div><h2 id="cartTitle">Tu carrito</h2><p id="cartSubtitle">Sin productos</p></div><button type="button" class="icon-btn icon-btn--soft" data-close aria-label="Cerrar carrito"><i class="ph ph-x"></i></button></header>
+      <div class="drawer__select" id="cartSelectRow"><label class="check-row"><input type="checkbox" class="checkbox" id="selectAll"><span>Seleccionar todo</span></label></div>
+      <ul class="cart-list" id="cartList"></ul>
+      <div class="cart-empty" id="cartEmpty"><i class="ph ph-shopping-cart"></i><h3>Tu carrito está vacío</h3><p>Agrega equipos del catálogo.</p></div>
+      <footer class="drawer__foot" id="cartFoot"><dl class="totals"><div><dt>Subtotal (<span id="selCount">0</span>)</dt><dd id="cartSubtotal">S/ 0</dd></div><div><dt>Envío</dt><dd id="cartShipping">Gratis</dd></div><div class="totals__grand"><dt>Total</dt><dd id="cartTotal">S/ 0</dd></div></dl><button type="button" class="btn btn--primary btn--lg btn--block" id="checkoutBtn" disabled><i class="ph ph-lock-key"></i> Proceder al pago</button></footer>
+    </div>
+  </dialog>
+  <div class="toasts" id="toasts" popover="manual" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Consultas | Nexora · PCs, Laptops y Componentes de alta gama</title>
+  <title>Productos | Nexora · PCs, Laptops y Componentes de alta gama</title>
   <meta name="description" content="Nexora: tienda premium de laptops, PCs gamer, componentes y periféricos de alto rendimiento. Envío rápido, garantía extendida y pago seguro.">
   <meta name="theme-color" content="#f4f6fb">
 
@@ -43,7 +43,6 @@
           <li><a href="promociones.html" class="nav__link" data-spy="promociones">Promociones</a></li>
           <li><a href="productos.html" class="nav__link" data-spy="productos">Productos</a></li>
           <li><a href="consultas.html" class="nav__link" data-spy="consultas">Consultas</a></li>
-          <li><a href="login.html" class="nav__link">Iniciar sesión</a></li>
         </ul>
         <a href="productos.html" class="btn btn--primary btn--sm nav__cta">Ver productos <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
       </nav>
@@ -64,63 +63,53 @@
   </header>
 
   <main id="main">
-    <!-- ============ CONSULTAS / SOPORTE ============ -->
-    <section id="consultas" class="section">
+    <!-- ============ PRODUCTOS ============ -->
+    <section id="productos" class="section">
       <div class="container">
         <header class="section-head reveal">
-          <span class="eyebrow">Consultas</span>
-          <h2>¿Necesitas ayuda? Estamos aquí</h2>
-          <p>Asesoría para armar tu PC, elegir una laptop o resolver dudas sobre tu pedido.</p>
+          <span class="eyebrow">Catálogo</span>
+          <h2>Encuentra tu próximo equipo</h2>
+          <p>Busca y filtra entre laptops, PCs, componentes, monitores y periféricos.</p>
         </header>
 
-        <div class="support">
-          <aside class="support__call glass reveal" data-reveal="left">
-            <span class="support__icon"><i class="ph-fill ph-headset" aria-hidden="true"></i></span>
-            <h3>Llámanos directamente</h3>
-            <p>Habla con un especialista y recibe una recomendación personalizada en minutos.</p>
-            <a class="support__phone" href="tel:+5117004040">+51 (1) 700-4040</a>
-            <ul class="support__list">
-              <li><i class="ph ph-clock" aria-hidden="true"></i> Lun a Sáb · 9:00 – 20:00</li>
-              <li><i class="ph ph-whatsapp-logo" aria-hidden="true"></i> WhatsApp: +51 999 404 040</li>
-              <li><i class="ph ph-envelope-simple" aria-hidden="true"></i> soporte@nexora.pe</li>
-            </ul>
-          </aside>
-
-          <form class="support__form glass reveal" data-reveal="right" id="contactForm" style="--d:100ms">
-            <h3>Envíanos un mensaje</h3>
-            <div class="form-grid">
-              <div class="field">
-                <label for="cName">Nombre completo</label>
-                <input type="text" id="cName" name="name" autocomplete="name" required minlength="2" maxlength="80" placeholder="Tu nombre">
-              </div>
-              <div class="field">
-                <label for="cEmail">Correo electrónico</label>
-                <input type="email" id="cEmail" name="email" autocomplete="email" required maxlength="120" placeholder="tu@correo.com">
-              </div>
-              <div class="field field--full">
-                <label for="cTopic">Motivo de la consulta</label>
-                <div class="select">
-                  <select id="cTopic" name="topic" required>
-                    <option value="">Selecciona un motivo</option>
-                    <option>Asesoría de compra</option>
-                    <option>Armado de PC a medida</option>
-                    <option>Estado de mi pedido</option>
-                    <option>Garantía y soporte técnico</option>
-                    <option>Otro</option>
-                  </select>
-                  <i class="ph ph-caret-down" aria-hidden="true"></i>
-                </div>
-              </div>
-              <div class="field field--full">
-                <label for="cMsg">Mensaje</label>
-                <textarea id="cMsg" name="message" rows="4" required minlength="10" maxlength="600" placeholder="Cuéntanos en qué podemos ayudarte…"></textarea>
-              </div>
+        <form class="filters glass reveal" id="filtersForm" role="search" aria-label="Buscar y filtrar productos" style="--d:80ms">
+          <div class="search">
+            <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" id="searchInput" name="q" placeholder="Busca laptops, PCs gamer, GPUs, monitores…" aria-label="Buscar productos" autocomplete="off" maxlength="80">
+          </div>
+          <div class="filters__row">
+            <div class="field">
+              <label for="fCategory">Categoría</label>
+              <div class="select"><select id="fCategory" name="category"></select><i class="ph ph-caret-down" aria-hidden="true"></i></div>
             </div>
-            <button type="submit" class="btn btn--primary btn--lg btn--block"><i class="ph ph-paper-plane-tilt" aria-hidden="true"></i> Enviar consulta</button>
-          </form>
+            <div class="field">
+              <label for="fPrice">Precio</label>
+              <div class="select"><select id="fPrice" name="price"></select><i class="ph ph-caret-down" aria-hidden="true"></i></div>
+            </div>
+            <div class="field">
+              <label for="fBrand">Marca</label>
+              <div class="select"><select id="fBrand" name="brand"></select><i class="ph ph-caret-down" aria-hidden="true"></i></div>
+            </div>
+            <button type="submit" class="btn btn--primary btn--lg filters__apply"><i class="ph ph-funnel" aria-hidden="true"></i> Aplicar filtros</button>
+          </div>
+        </form>
+
+        <div class="results-bar">
+          <p id="resultsCount" aria-live="polite"></p>
+          <button type="button" class="link-btn" id="clearFilters"><i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i> Limpiar filtros</button>
+        </div>
+
+        <ul class="grid" id="productGrid" aria-label="Lista de productos"></ul>
+
+        <div class="empty" id="emptyState" hidden>
+          <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+          <h3>No encontramos resultados</h3>
+          <p>Prueba con otros filtros o una búsqueda diferente.</p>
+          <button type="button" class="btn btn--ghost" id="emptyReset">Ver todo el catálogo</button>
         </div>
       </div>
     </section>
+
   </main>
 
   <!-- ============ FOOTER ============ -->

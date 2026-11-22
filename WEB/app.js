@@ -314,6 +314,51 @@
     observeReveals(grid);
   }
 
+  function renderPromotionsGrid() {
+    const grid = byId('promoGrid');
+    if (!grid) return;
+    const category = byId('promoCategory')?.value || '';
+    const discount = byId('promoDiscount')?.value || '';
+    const brand = byId('promoBrand')?.value || '';
+
+    const list = PRODUCTS.filter((p) => p.oldPrice).filter((p) =>
+      (!category || p.category === category) &&
+      (!brand || p.brand === brand) &&
+      (!discount || discountPct(p) >= Number(discount))
+    );
+
+    grid.innerHTML = list.map(productCard).join('');
+    const count = byId('promoResults');
+    if (count) count.textContent = `Mostrando ${list.length} promociones`;
+    observeReveals(grid);
+  }
+
+  function initPromotions() {
+    const grid = byId('promoGrid');
+    if (!grid) return;
+    const category = byId('promoCategory');
+    const brand = byId('promoBrand');
+    const discount = byId('promoDiscount');
+    const categories = [...new Set(PRODUCTS.filter((p) => p.oldPrice).map((p) => p.category))];
+    const brands = [...new Set(PRODUCTS.filter((p) => p.oldPrice).map((p) => p.brand))].sort((a, b) => a.localeCompare(b));
+    fillSelect(category, [{ label: 'Todas', value: '' }, ...categories.map((value) => ({ label: value, value }))]);
+    fillSelect(discount, [
+      { label: 'Todos', value: '' },
+      { label: '10% o más', value: '10' },
+      { label: '15% o más', value: '15' },
+      { label: '20% o más', value: '20' },
+    ]);
+    fillSelect(brand, [{ label: 'Todas', value: '' }, ...brands.map((value) => ({ label: value, value }))]);
+    byId('promoFilters')?.addEventListener('submit', (event) => { event.preventDefault(); renderPromotionsGrid(); });
+    byId('clearPromoFilters')?.addEventListener('click', () => {
+      category.value = '';
+      brand.value = '';
+      discount.value = '';
+      renderPromotionsGrid();
+    });
+    renderPromotionsGrid();
+  }
+
   /* -----------------------------------------------------------------------
      HERO + PROMOCIONES (carrusel accesible)
      ----------------------------------------------------------------------- */
@@ -428,20 +473,21 @@
   function updateAuthUI() {
     const user = state.user;
     const profileIcon = els.profileBtn;
+    if (!profileIcon) return;
 
     if (user) {
       profileIcon.innerHTML = `<span class="avatar" aria-hidden="true">${esc(initialOf(user.name))}</span>`;
       profileIcon.setAttribute('aria-label', `Perfil de ${user.name}`);
-      byId('userAvatar').textContent = initialOf(user.name);
-      byId('userName').textContent = user.name;
-      byId('userEmail').textContent = user.email;
+      if (byId('userAvatar')) byId('userAvatar').textContent = initialOf(user.name);
+      if (byId('userName')) byId('userName').textContent = user.name;
+      if (byId('userEmail')) byId('userEmail').textContent = user.email;
     } else {
       profileIcon.innerHTML = '<i class="ph ph-user" aria-hidden="true"></i>';
       profileIcon.setAttribute('aria-label', 'Perfil: iniciar sesión');
     }
-    auth.guest.hidden = !!user;
-    auth.user.hidden = !user;
-    auth.title.textContent = user ? `Hola, ${user.name.split(' ')[0]}` : 'Bienvenido a Nexora';
+    if (auth.guest) auth.guest.hidden = !!user;
+    if (auth.user) auth.user.hidden = !user;
+    if (auth.title) auth.title.textContent = user ? `Hola, ${user.name.split(' ')[0]}` : 'Bienvenido a Nexora';
   }
 
   function selectTab(name) {
@@ -466,7 +512,8 @@
   function requireAuth(action) {
     if (state.user) { action(); return; }
     state.pending = action;
-    openAuth({ reason: true });
+    store.set('nexora.returnUrl', window.location.pathname.split('/').pop() || 'index.html');
+    window.location.assign('login.html');
   }
 
   function completeLogin(user) {
@@ -494,6 +541,13 @@
   }
 
   function initAuth() {
+    if (!els.authDialog) {
+      if (els.profileBtn) els.profileBtn.addEventListener('click', () => {
+        if (state.user) openCart();
+        else window.location.assign('login.html');
+      });
+      return;
+    }
     auth.tabs.forEach((t) => t.addEventListener('click', () => selectTab(t.dataset.tab)));
     auth.tabs.forEach((t) => t.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') selectTab(t.dataset.tab === 'login' ? 'register' : 'login');
@@ -532,7 +586,10 @@
     els.authDialog.addEventListener('close', () => { state.pending = null; });
 
     // El ícono de perfil es uno de los dos únicos disparadores del modal
-    els.profileBtn.addEventListener('click', () => openAuth());
+    els.profileBtn.addEventListener('click', () => {
+      if (!state.user) window.location.assign('login.html');
+      else openAuth();
+    });
     byId('logoutBtn').addEventListener('click', logout);
     byId('userCartBtn').addEventListener('click', openCart);
   }
@@ -644,6 +701,7 @@
   function openCart() { openDialog(els.cartDialog); }
 
   function initCart() {
+    if (!els.cartBtn || !els.cartDialog || !els.cartCount) return;
     state.cart = loadCart();
     renderCart();
 
@@ -678,13 +736,20 @@
       renderCart();
     });
 
-    byId('cartBrowse').addEventListener('click', () => {
-      els.cartDialog.close();
-      byId('productos').scrollIntoView({ behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
-    });
+    const cartBrowse = byId('cartBrowse');
+    if (cartBrowse) {
+      cartBrowse.addEventListener('click', () => {
+        els.cartDialog.close();
+        byId('productos')?.scrollIntoView({ behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
+      });
+    }
 
     cartEls.checkout.addEventListener('click', () => {
       if (selectedItems().length === 0) return;
+      if (!els.payDialog) {
+        toast('Tu compra está lista. Continúa desde el catálogo para finalizar el pago.', { icon: 'ph-info' });
+        return;
+      }
       requireAuth(startPayment);
     });
   }
@@ -697,6 +762,7 @@
       const id = Number(btn.dataset.buy);
       const product = findProduct(id);
       if (!product) return;
+      if (!state.user) store.set('nexora.pendingBuy', id);
       requireAuth(() => {
         addToCart(id);
         toast(`${product.name} añadido al carrito`, { icon: 'ph-shopping-cart-simple' });
@@ -777,6 +843,7 @@
   }
 
   function initPayment() {
+    if (!els.payDialog || !byId('payForm')) return;
     $$('input[name="method"]').forEach((r) => r.addEventListener('change', () => setMethod(r.value)));
     $$('input[name="wallet"]').forEach((r) => r.addEventListener('change', syncWallet));
 
@@ -861,11 +928,19 @@
       initFilters();
       renderProducts();
     }
+    initPromotions();
     initNavigation();
     initAuth();
     updateAuthUI();
     initCart();
     initBuyButtons();
+    const pendingBuy = store.get('nexora.pendingBuy', null);
+    if (state.user && pendingBuy) {
+      store.set('nexora.pendingBuy', null);
+      addToCart(Number(pendingBuy));
+      toast(`${findProduct(Number(pendingBuy))?.name || 'Producto'} añadido al carrito`, { icon: 'ph-shopping-cart-simple' });
+      if (els.cartDialog) openCart();
+    }
     initPayment();
     initContact();
     observeReveals();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Promociones | Nexora · PCs, Laptops y Componentes de alta gama</title>
+  <title>Nexora · PCs, Laptops y Componentes de alta gama</title>
   <meta name="description" content="Nexora: tienda premium de laptops, PCs gamer, componentes y periféricos de alto rendimiento. Envío rápido, garantía extendida y pago seguro.">
   <meta name="theme-color" content="#f4f6fb">
 
@@ -32,18 +32,17 @@
   <!-- ============ HEADER ============ -->
   <header class="site-header" id="siteHeader">
     <div class="container header-inner">
-      <a href="index.html" class="logo" aria-label="Nexora, ir al inicio">
+      <a href="#inicio" class="logo" aria-label="Nexora, ir al inicio">
         <span class="logo__mark"><i class="ph-fill ph-cpu" aria-hidden="true"></i></span>
         <span class="logo__text">Nexora</span>
       </a>
 
       <nav class="nav" id="mainNav" aria-label="Principal">
         <ul class="nav__list">
-          <li><a href="index.html" class="nav__link" data-spy="inicio">Inicio</a></li>
-          <li><a href="promociones.html" class="nav__link" data-spy="promociones">Promociones</a></li>
-          <li><a href="productos.html" class="nav__link" data-spy="productos">Productos</a></li>
-          <li><a href="consultas.html" class="nav__link" data-spy="consultas">Consultas</a></li>
-          <li><a href="login.html" class="nav__link">Iniciar sesión</a></li>
+          <li><a href="#inicio" class="nav__link" data-spy="inicio">Inicio</a></li>
+          <li><a href="#promociones" class="nav__link" data-spy="promociones">Promociones</a></li>
+          <li><a href="productos.html" class="nav__link">Productos</a></li>
+          <li><a href="#consultas" class="nav__link" data-spy="consultas">Consultas</a></li>
         </ul>
         <a href="productos.html" class="btn btn--primary btn--sm nav__cta">Ver productos <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
       </nav>
@@ -64,6 +63,76 @@
   </header>
 
   <main id="main">
+
+    <!-- ============ INICIO / HERO ============ -->
+    <section id="inicio" class="hero">
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <span class="pill reveal"><i class="ph-fill ph-sparkle" aria-hidden="true"></i> Colección 2026 · Alto rendimiento</span>
+          <h1 class="reveal" style="--d:80ms">Tecnología <span class="grad-text">sin límites</span>, diseñada para ti.</h1>
+          <p class="hero__lead reveal" style="--d:160ms">
+            Laptops, PCs y componentes de élite seleccionados por expertos. Potencia real para crear, jugar y trabajar, con garantía extendida y envío express.
+          </p>
+          <div class="hero__cta reveal" style="--d:240ms">
+            <a class="btn btn--primary btn--lg" href="productos.html">Ver productos <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+            <a class="btn btn--ghost btn--lg" href="#promociones"><i class="ph ph-percent" aria-hidden="true"></i> Ofertas del mes</a>
+          </div>
+          <dl class="hero__stats reveal" style="--d:320ms">
+            <div><dt>Clientes felices</dt><dd>15K+</dd></div>
+            <div><dt>Garantía</dt><dd>24 m</dd></div>
+            <div><dt>Envío en Lima</dt><dd>48 h</dd></div>
+          </dl>
+        </div>
+
+        <div class="hero__visual reveal" data-reveal="zoom" style="--d:150ms">
+          <article class="star glass">
+            <span class="star__label"><i class="ph-fill ph-star" aria-hidden="true"></i> Producto estrella</span>
+            <div class="star__img">
+              <img id="starImg" alt="MacBook Pro 14 pulgadas sobre un escritorio" width="900" height="700" fetchpriority="high" decoding="async">
+            </div>
+            <div class="star__info">
+              <div>
+                <p class="star__name">MacBook Pro 14″ M3 Pro</p>
+                <p class="star__meta">Apple · 18 GB · 512 GB SSD</p>
+              </div>
+              <div class="star__buy">
+                <strong id="starPrice">—</strong>
+                <button type="button" class="btn btn--primary" data-buy="1"><i class="ph ph-shopping-bag" aria-hidden="true"></i> Comprar ahora</button>
+              </div>
+            </div>
+          </article>
+          <div class="float-chip glass chip-1"><i class="ph-fill ph-battery-full" aria-hidden="true"></i> 18 h de batería</div>
+          <div class="float-chip glass chip-2"><i class="ph-fill ph-lightning" aria-hidden="true"></i> Chip M3 Pro</div>
+          <div class="float-chip glass chip-3"><i class="ph-fill ph-monitor" aria-hidden="true"></i> Liquid Retina XDR</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ventajas -->
+    <section class="perks" aria-label="Ventajas de comprar en Nexora">
+      <div class="container perks__grid">
+        <div class="perk glass reveal"><i class="ph ph-truck" aria-hidden="true"></i><div><h3>Envío gratis</h3><p>En compras desde S/ 1,500</p></div></div>
+        <div class="perk glass reveal" style="--d:90ms"><i class="ph ph-shield-check" aria-hidden="true"></i><div><h3>Garantía 24 meses</h3><p>Soporte técnico certificado</p></div></div>
+        <div class="perk glass reveal" style="--d:180ms"><i class="ph ph-credit-card" aria-hidden="true"></i><div><h3>Pago flexible</h3><p>Tarjeta, QR y billeteras</p></div></div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCTOS DESTACADOS ============ -->
+    <section class="section" aria-labelledby="featuredTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="eyebrow">Selección Nexora</span>
+          <h2 id="featuredTitle">Equipos para llevar tu setup más lejos</h2>
+          <p>Una muestra de laptops, PCs y componentes disponibles en nuestro catálogo.</p>
+        </header>
+
+        <ul class="grid" id="featuredGrid" aria-label="Productos destacados"></ul>
+        <div class="featured-cta">
+          <a class="btn btn--ghost btn--lg" href="productos.html">Explorar todos los productos <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ PROMOCIONES ============ -->
     <section id="promociones" class="section">
       <div class="container">
@@ -87,20 +156,77 @@
       </div>
     </section>
 
+    <!-- ============ CONSULTAS / SOPORTE ============ -->
+    <section id="consultas" class="section">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="eyebrow">Consultas</span>
+          <h2>¿Necesitas ayuda? Estamos aquí</h2>
+          <p>Asesoría para armar tu PC, elegir una laptop o resolver dudas sobre tu pedido.</p>
+        </header>
+
+        <div class="support">
+          <aside class="support__call glass reveal" data-reveal="left">
+            <span class="support__icon"><i class="ph-fill ph-headset" aria-hidden="true"></i></span>
+            <h3>Llámanos directamente</h3>
+            <p>Habla con un especialista y recibe una recomendación personalizada en minutos.</p>
+            <a class="support__phone" href="tel:+5117004040">+51 (1) 700-4040</a>
+            <ul class="support__list">
+              <li><i class="ph ph-clock" aria-hidden="true"></i> Lun a Sáb · 9:00 – 20:00</li>
+              <li><i class="ph ph-whatsapp-logo" aria-hidden="true"></i> WhatsApp: +51 999 404 040</li>
+              <li><i class="ph ph-envelope-simple" aria-hidden="true"></i> soporte@nexora.pe</li>
+            </ul>
+          </aside>
+
+          <form class="support__form glass reveal" data-reveal="right" id="contactForm" style="--d:100ms">
+            <h3>Envíanos un mensaje</h3>
+            <div class="form-grid">
+              <div class="field">
+                <label for="cName">Nombre completo</label>
+                <input type="text" id="cName" name="name" autocomplete="name" required minlength="2" maxlength="80" placeholder="Tu nombre">
+              </div>
+              <div class="field">
+                <label for="cEmail">Correo electrónico</label>
+                <input type="email" id="cEmail" name="email" autocomplete="email" required maxlength="120" placeholder="tu@correo.com">
+              </div>
+              <div class="field field--full">
+                <label for="cTopic">Motivo de la consulta</label>
+                <div class="select">
+                  <select id="cTopic" name="topic" required>
+                    <option value="">Selecciona un motivo</option>
+                    <option>Asesoría de compra</option>
+                    <option>Armado de PC a medida</option>
+                    <option>Estado de mi pedido</option>
+                    <option>Garantía y soporte técnico</option>
+                    <option>Otro</option>
+                  </select>
+                  <i class="ph ph-caret-down" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div class="field field--full">
+                <label for="cMsg">Mensaje</label>
+                <textarea id="cMsg" name="message" rows="4" required minlength="10" maxlength="600" placeholder="Cuéntanos en qué podemos ayudarte…"></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn--primary btn--lg btn--block"><i class="ph ph-paper-plane-tilt" aria-hidden="true"></i> Enviar consulta</button>
+          </form>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ============ FOOTER ============ -->
   <footer class="site-footer">
     <div class="container footer-inner">
-      <a href="index.html" class="logo" aria-label="Nexora, volver arriba">
+      <a href="#inicio" class="logo" aria-label="Nexora, volver arriba">
         <span class="logo__mark"><i class="ph-fill ph-cpu" aria-hidden="true"></i></span>
         <span class="logo__text">Nexora</span>
       </a>
       <p>© 2026 Nexora Tech. Proyecto académico de demostración · Las imágenes pertenecen a Unsplash.</p>
       <ul class="footer-links">
-        <li><a href="promociones.html">Promociones</a></li>
+        <li><a href="#promociones">Promociones</a></li>
         <li><a href="productos.html">Productos</a></li>
-        <li><a href="consultas.html">Consultas</a></li>
+        <li><a href="#consultas">Consultas</a></li>
       </ul>
     </div>
   </footer>
