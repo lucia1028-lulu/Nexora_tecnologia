@@ -1,17 +1,31 @@
+(function () {
+  'use strict';
+
+  const D = window.NEXORA_DATA;
+  const UI = window.NEXORA_UI;
+  if (!D || !UI) {
+    console.error('Nexora: falta data-mock.js o layout.js');
+    return;
+  }
+
+  const { db, onDataChange, adjustStock, stockLevel, bestPromo, CATEGORIES, SPEC_FIELDS, SKU_PREFIX } = D;
+  const { initLayout, $, $$, esc, norm, fmt, badge, emptyRow, toast, confirmDialog, openModal, closeModal, debounce } = UI;
+
+  let ctx;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ctx = initLayout({ module: 'productos' });
+    if (ctx) main();
+  });
+
 /* ==========================================================================
    NEXORA ADMIN · productos.js
    CRUD completo de laptops, PCs y componentes (SKU, marca, especificaciones,
    precio, estado). El stock inicial genera su entrada en el kardex.
    ========================================================================== */
-import { db, onDataChange, adjustStock, stockLevel, bestPromo, CATEGORIES, SPEC_FIELDS, SKU_PREFIX } from './data-mock.js';
-import { initLayout, $, $$, esc, norm, fmt, badge, emptyRow, toast, confirmDialog, openModal, closeModal, debounce } from './layout.js';
-
-const ctx = initLayout({ module: 'productos' });
-if (ctx) main();
-
 function main() {
   const VIEW_KEY = 'nexora.admin.productsView';
-  const state = { q: '', cat: '', brand: '', status: '', view: localStorage.getItem(VIEW_KEY) || 'grid', editingId: null, skuTouched: false };
+  const state = { q: '', cat: '', brand: '', status: '', view: window.NEXORA_STORE.getItem(VIEW_KEY) || 'grid', editingId: null, skuTouched: false };
   const dlg = $('#productDialog');
   const form = $('#productForm');
   const F = {
@@ -37,7 +51,7 @@ function main() {
   $('#fCategory').addEventListener('change', (e) => { state.cat = e.target.value; render(); });
   $('#fBrand').addEventListener('change', (e) => { state.brand = e.target.value; render(); });
   $('#fStatus').addEventListener('change', (e) => { state.status = e.target.value; render(); });
-  $$('[data-view]').forEach((b) => b.addEventListener('click', () => { state.view = b.dataset.view; localStorage.setItem(VIEW_KEY, state.view); render(); }));
+  $$('[data-view]').forEach((b) => b.addEventListener('click', () => { state.view = b.dataset.view; window.NEXORA_STORE.setItem(VIEW_KEY, state.view); render(); }));
 
   const filtered = () => {
     const q = norm(state.q);
@@ -243,3 +257,5 @@ function main() {
   render();
   onDataChange(render);
 }
+
+})();

@@ -1,14 +1,28 @@
+(function () {
+  'use strict';
+
+  const D = window.NEXORA_DATA;
+  const UI = window.NEXORA_UI;
+  if (!D || !UI) {
+    console.error('Nexora: falta data-mock.js o layout.js');
+    return;
+  }
+
+  const { db, onDataChange, MODULES, ACTIONS } = D;
+  const { initLayout, $, $$, esc, toast, confirmDialog, openModal, closeModal } = UI;
+
+  let ctx;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ctx = initLayout({ module: 'roles' });
+    if (ctx) main();
+  });
+
 /* ==========================================================================
    NEXORA ADMIN · roles.js
    Gestión de roles (Administrador, Vendedor de Caja, Almacenero…) y matriz
    de permisos por módulo (ver / crear / editar / eliminar)
    ========================================================================== */
-import { db, onDataChange, MODULES, ACTIONS } from './data-mock.js';
-import { initLayout, $, $$, esc, toast, confirmDialog, openModal, closeModal } from './layout.js';
-
-const ctx = initLayout({ module: 'roles' });
-if (ctx) main();
-
 function main() {
   const ACTION_KEYS = Object.keys(ACTIONS);
   const state = { selected: ctx.user.roleId || db.all('roles')[0]?.id, draft: null, editingId: null };
@@ -213,3 +227,5 @@ function main() {
   render();
   onDataChange(render);
 }
+
+})();

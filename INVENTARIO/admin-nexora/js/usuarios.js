@@ -1,13 +1,27 @@
+(function () {
+  'use strict';
+
+  const D = window.NEXORA_DATA;
+  const UI = window.NEXORA_UI;
+  if (!D || !UI) {
+    console.error('Nexora: falta data-mock.js o layout.js');
+    return;
+  }
+
+  const { db, onDataChange } = D;
+  const { initLayout, $, $$, esc, norm, fmt, badge, avatar, emptyRow, toast, confirmDialog, openModal, closeModal, debounce } = UI;
+
+  let ctx;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ctx = initLayout({ module: 'usuarios' });
+    if (ctx) main();
+  });
+
 /* ==========================================================================
    NEXORA ADMIN · usuarios.js
    CRUD de usuarios del sistema (personal) y clientes, con asignación de roles
    ========================================================================== */
-import { db, onDataChange } from './data-mock.js';
-import { initLayout, $, $$, esc, norm, fmt, badge, avatar, emptyRow, toast, confirmDialog, openModal, closeModal, debounce } from './layout.js';
-
-const ctx = initLayout({ module: 'usuarios' });
-if (ctx) main();
-
 function main() {
   const state = { tab: 'Personal', q: '', role: '', status: '', editingId: null };
   const dlg = $('#userDialog');
@@ -188,3 +202,5 @@ function main() {
   render();
   onDataChange(render);
 }
+
+})();

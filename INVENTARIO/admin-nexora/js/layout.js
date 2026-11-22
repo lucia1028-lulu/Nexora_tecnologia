@@ -1,26 +1,31 @@
+(function () {
+  'use strict';
+
+  const D = window.NEXORA_DATA;
+  if (!D) {
+    console.error('Nexora: data-mock.js debe cargarse antes de layout.js');
+    return;
+  }
+  const { db, MODULES, getSessionUser, setSessionUser, hasPermission, stockLevel, promoStatus, onDataChange, dayKey, addDays, startOfDay } = D;
+
 /* ==========================================================================
    NEXORA ADMIN · layout.js
    Lógica compartida: sidebar, sesión, permisos, notificaciones, utilidades
    de moneda (S/), modales, toasts, paginación, gráficos SVG y exportación CSV.
    ========================================================================== */
-import {
-  db, MODULES, getSessionUser, setSessionUser, hasPermission, stockLevel,
-  promoStatus, onDataChange, dayKey, addDays, startOfDay,
-} from './data-mock.js';
-
 /* ---------------------------------------------------------------------------
    Utilidades generales
    --------------------------------------------------------------------------- */
-export const $ = (sel, root = document) => root.querySelector(sel);
-export const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-export const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-export const norm = (s) => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-export const debounce = (fn, ms = 200) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const norm = (s) => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+const debounce = (fn, ms = 200) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
 
 const moneyFmt = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN', minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const intFmt = new Intl.NumberFormat('es-PE');
-export const fmt = {
+const fmt = {
   /** Moneda en Soles peruanos: S/ 1,234.50 */
   money: (n) => moneyFmt.format(Number(n) || 0),
   int: (n) => intFmt.format(Number(n) || 0),
@@ -41,24 +46,24 @@ export const fmt = {
   },
 };
 
-export const PALETTE = ['#4F46E5', '#7C3AED', '#0EA5E9', '#10B981', '#F59E0B', '#F43F5E', '#64748B'];
+const PALETTE = ['#4F46E5', '#7C3AED', '#0EA5E9', '#10B981', '#F59E0B', '#F43F5E', '#64748B'];
 
 const ORDER_TONES = { Pendiente: 'warning', Procesando: 'info', Enviado: 'purple', Entregado: 'success', Cancelado: 'danger' };
-export const orderTone = (status) => ORDER_TONES[status] || 'neutral';
+const orderTone = (status) => ORDER_TONES[status] || 'neutral';
 
 /** Badge tipo píldora. */
-export const badge = (text, tone = 'neutral', icon = '') =>
+const badge = (text, tone = 'neutral', icon = '') =>
   `<span class="badge badge--${tone}">${icon ? `<i class="ph-fill ${icon}" aria-hidden="true"></i>` : ''}${esc(text)}</span>`;
 
 const AVATAR_COLORS = ['#4F46E5', '#7C3AED', '#0EA5E9', '#10B981', '#F59E0B', '#F43F5E', '#14B8A6'];
-export const initials = (name) => String(name || '?').trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
-export function avatar(name, size = '') {
+const initials = (name) => String(name || '?').trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+function avatar(name, size = '') {
   const code = [...String(name)].reduce((a, c) => a + c.charCodeAt(0), 0);
   return `<span class="avatar ${size}" style="--av:${AVATAR_COLORS[code % AVATAR_COLORS.length]}" aria-hidden="true">${esc(initials(name))}</span>`;
 }
 
 /** Fila de tabla para estados vacíos. */
-export const emptyRow = (cols, msg = 'Sin resultados', icon = 'ph-magnifying-glass') =>
+const emptyRow = (cols, msg = 'Sin resultados', icon = 'ph-magnifying-glass') =>
   `<tr class="table__empty"><td colspan="${cols}"><div class="empty"><i class="ph ${icon}" aria-hidden="true"></i><p>${esc(msg)}</p></div></td></tr>`;
 
 /* Imagen de respaldo si Unsplash falla */
@@ -71,7 +76,7 @@ document.addEventListener('error', (e) => {
 /* ---------------------------------------------------------------------------
    CSV
    --------------------------------------------------------------------------- */
-export function downloadCSV(filename, headers, rows) {
+function downloadCSV(filename, headers, rows) {
   const cell = (v) => {
     let s = String(v ?? '');
     if (typeof v === 'string' && /^[=+\-@]/.test(s)) s = `'${s}`; // evita inyección de fórmulas en Excel
@@ -91,7 +96,7 @@ export function downloadCSV(filename, headers, rows) {
 /* ---------------------------------------------------------------------------
    Toasts (popover para verse por encima de los modales)
    --------------------------------------------------------------------------- */
-export function toast(message, type = 'success') {
+function toast(message, type = 'success') {
   let host = $('#toasts');
   if (!host) {
     host = document.createElement('div');
@@ -118,8 +123,8 @@ export function toast(message, type = 'success') {
 /* ---------------------------------------------------------------------------
    Modales (<dialog> nativo)
    --------------------------------------------------------------------------- */
-export const openModal = (dlg) => { if (dlg && !dlg.open) dlg.showModal(); };
-export const closeModal = (dlg) => { if (dlg && dlg.open) dlg.close(); };
+const openModal = (dlg) => { if (dlg && !dlg.open) dlg.showModal(); };
+const closeModal = (dlg) => { if (dlg && dlg.open) dlg.close(); };
 
 document.addEventListener('click', (e) => {
   const closer = e.target.closest('[data-close]');
@@ -135,7 +140,7 @@ document.addEventListener('click', (e) => {
 })();
 
 /** Confirmación accesible. Devuelve Promise<boolean>. */
-export function confirmDialog({ title = '¿Confirmar acción?', message = '', confirmText = 'Confirmar', danger = false, icon } = {}) {
+function confirmDialog({ title = '¿Confirmar acción?', message = '', confirmText = 'Confirmar', danger = false, icon } = {}) {
   return new Promise((resolve) => {
     const dlg = document.createElement('dialog');
     dlg.className = 'modal modal--sm';
@@ -161,7 +166,7 @@ export function confirmDialog({ title = '¿Confirmar acción?', message = '', co
 /* ---------------------------------------------------------------------------
    Paginación
    --------------------------------------------------------------------------- */
-export function renderPager(el, { page, pageSize, total, onChange, noun = 'registros' }) {
+function renderPager(el, { page, pageSize, total, onChange, noun = 'registros' }) {
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const from = total ? (page - 1) * pageSize + 1 : 0;
   const to = Math.min(total, page * pageSize);
@@ -192,7 +197,7 @@ function niceMax(v) {
 }
 
 /** Gráfico de área suavizado con tooltip. points: [{label, value, sub}] */
-export function areaChart(el, points, { format = fmt.money, ariaLabel = 'Gráfico de ventas' } = {}) {
+function areaChart(el, points, { format = fmt.money, ariaLabel = 'Gráfico de ventas' } = {}) {
   if (!points.length) { el.innerHTML = '<div class="empty"><i class="ph ph-chart-line" aria-hidden="true"></i><p>Sin datos en este periodo</p></div>'; return; }
   const W = 760, H = 270, pl = 54, pr = 14, pt = 14, pb = 30;
   const max = niceMax(Math.max(...points.map((p) => p.value), 1));
@@ -245,7 +250,7 @@ export function areaChart(el, points, { format = fmt.money, ariaLabel = 'Gráfic
 }
 
 /** Dona con leyenda. segments: [{label, value, color?}] */
-export function donut(el, segments, { format = fmt.money, centerLabel = 'Total', ariaLabel = 'Distribución' } = {}) {
+function donut(el, segments, { format = fmt.money, centerLabel = 'Total', ariaLabel = 'Distribución' } = {}) {
   const total = segments.reduce((a, s) => a + s.value, 0);
   if (!total) { el.innerHTML = '<div class="empty"><i class="ph ph-chart-donut" aria-hidden="true"></i><p>Sin datos en este periodo</p></div>'; return; }
   let acc = 0;
@@ -268,7 +273,7 @@ export function donut(el, segments, { format = fmt.money, centerLabel = 'Total',
 }
 
 /** Mini gráfico de tendencia para KPIs. */
-export function sparkline(values, color = '#4F46E5') {
+function sparkline(values, color = '#4F46E5') {
   const w = 96, h = 32;
   const max = Math.max(...values, 1), min = Math.min(...values, 0);
   const span = max - min || 1;
@@ -282,7 +287,7 @@ export function sparkline(values, color = '#4F46E5') {
 let ctx = null;
 
 /** Aplica data-perm="modulo:accion" (o solo "accion" para el módulo actual). */
-export function applyPermissions(root = document) {
+function applyPermissions(root = document) {
   if (!ctx) return;
   $$('[data-perm]', root).forEach((el) => {
     const [a, b] = el.dataset.perm.split(':');
@@ -448,7 +453,7 @@ function bindChrome() {
  * Inicializa la estructura común. Devuelve el contexto de sesión o `null`
  * si el usuario no tiene permiso para ver el módulo.
  */
-export function initLayout({ module }) {
+function initLayout({ module }) {
   const user = getSessionUser();
   const role = user ? db.get('roles', user.roleId) : null;
   const can = (action, mod = module) => !!user && hasPermission(user.roleId, mod, action);
@@ -484,5 +489,14 @@ export function initLayout({ module }) {
 }
 
 /** Utilidades de rango de fechas compartidas (reportes / resumen). */
-export const dates = { dayKey, addDays, startOfDay };
+const dates = { dayKey, addDays, startOfDay };
 
+
+
+  window.NEXORA_UI = {
+    $, $$, esc, norm, debounce, fmt, PALETTE, orderTone, badge,
+    initials, avatar, emptyRow, downloadCSV, toast, openModal, closeModal,
+    confirmDialog, renderPager, areaChart, donut, sparkline,
+    applyPermissions, initLayout, dates,
+  };
+})();

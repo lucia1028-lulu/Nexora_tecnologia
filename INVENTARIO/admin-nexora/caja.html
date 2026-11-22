@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Venta de Caja · Nexora Admin</title>
+  <meta name="theme-color" content="#F8FAFC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/caja.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Saltar al contenido</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal"></aside>
+    <div class="app__main">
+      <header class="topbar" id="topbar"></header>
+      <main class="content" id="content" tabindex="-1">
+
+        <header class="page-head">
+          <div>
+            <h1>Venta de caja</h1>
+            <p id="cashierGreeting">Punto de venta · Nexora</p>
+          </div>
+          <div class="page-head__actions">
+            <a class="btn btn--ghost" href="pedidos.html"><i class="ph ph-package" aria-hidden="true"></i> Ver pedidos</a>
+          </div>
+        </header>
+
+        <div class="pos-grid">
+          <section class="card">
+            <div class="card__head">
+              <div><h2>Catálogo</h2><p>Productos activos con stock disponible</p></div>
+            </div>
+            <div class="toolbar">
+              <div class="search input-prefix">
+                <span><i class="ph ph-magnifying-glass" aria-hidden="true"></i></span>
+                <input id="posSearch" class="input" type="search" placeholder="Buscar por nombre, SKU o marca…" autocomplete="off" aria-label="Buscar productos">
+              </div>
+              <select id="posCategory" class="input" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
+            </div>
+            <div class="pos-catalog" id="posCatalog"></div>
+          </section>
+
+          <aside class="card pos-cart-card">
+            <div class="card__head">
+              <div><h2>Carrito</h2><p id="cartCount">0 productos</p></div>
+              <button type="button" class="btn btn--ghost btn--sm" id="clearCart">Vaciar</button>
+            </div>
+            <div class="card__body">
+              <div class="pos-cart" id="posCart"></div>
+              <form id="checkoutForm" class="pos-checkout">
+                <div class="field">
+                  <label for="customerName">Cliente (opcional)</label>
+                  <input id="customerName" class="input" placeholder="Nombre del cliente" autocomplete="off">
+                </div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="couponCode">Cupón</label>
+                    <input id="couponCode" class="input" placeholder="NEXORA10" autocomplete="off">
+                  </div>
+                  <div class="field">
+                    <label for="paymentMethod">Método de pago</label>
+                    <select id="paymentMethod" class="input"></select>
+                  </div>
+                </div>
+                <div class="pos-totals" id="posTotals"></div>
+                <button type="submit" class="btn btn--primary btn--lg btn--block" id="payBtn" data-perm="caja:create">
+                  <i class="ph ph-receipt" aria-hidden="true"></i> Registrar venta
+                </button>
+              </form>
+            </div>
+          </aside>
+        </div>
+
+        <article class="card card--flush">
+          <div class="card__head">
+            <div><h2>Últimas ventas de caja</h2><p>Registradas en esta sesión de datos</p></div>
+            <a class="link" href="reportes.html" data-perm="reportes:view">Ver reportes</a>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>N° venta</th><th>Cliente</th><th>Fecha</th><th>Método</th><th class="num">Total</th><th>Estado</th></tr></thead>
+              <tbody id="lastCashSales"></tbody>
+            </table>
+          </div>
+        </article>
+
+      </main>
+    </div>
+  </div>
+  <script src="js/data-mock.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/caja.js"></script>
+</body>
+</html>

@@ -1,15 +1,27 @@
+(function () {
+  'use strict';
+
+  const D = window.NEXORA_DATA;
+  const UI = window.NEXORA_UI;
+  if (!D || !UI) {
+    console.error('Nexora: falta data-mock.js o layout.js');
+    return;
+  }
+
+  const { db, onDataChange, createOrder, setOrderStatus, ORDER_STATUSES, ORDER_FLOW, COURIERS, dayKey } = D;
+  const { initLayout, $, $$, esc, norm, fmt, badge, orderTone, emptyRow, renderPager, downloadCSV, toast, confirmDialog, openModal, closeModal, debounce } = UI;
+
+  let ctx;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ctx = initLayout({ module: 'pedidos' });
+    if (ctx) main();
+  });
+
 /* ==========================================================================
    NEXORA ADMIN · pedidos.js
    Gestión de pedidos web, cambio de estados y detalle de orden
    ========================================================================== */
-import {
-  db, onDataChange, createOrder, setOrderStatus, ORDER_STATUSES, ORDER_FLOW, COURIERS, dayKey,
-} from './data-mock.js';
-import { initLayout, $, $$, esc, norm, fmt, badge, orderTone, emptyRow, renderPager, downloadCSV, toast, confirmDialog, openModal, closeModal, debounce } from './layout.js';
-
-const ctx = initLayout({ module: 'pedidos' });
-if (ctx) main();
-
 function main() {
   const PAGE_SIZE = 10;
   const params = new URLSearchParams(location.search);
@@ -229,3 +241,5 @@ function main() {
   const deepLink = params.get('order');
   if (deepLink && db.get('orders', deepLink)) openDetail(deepLink);
 }
+
+})();

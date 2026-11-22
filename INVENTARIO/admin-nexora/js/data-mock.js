@@ -1,22 +1,53 @@
+(function () {
+  'use strict';
+
+  /* Respaldo en memoria para file:/// o navegadores que restringen localStorage. */
+  const memory = new Map();
+  const failed = new Set();
+  const NEXORA_STORE = {
+    getItem(key) {
+      if (failed.has(key)) return memory.has(key) ? memory.get(key) : null;
+      try {
+        const value = window.localStorage.getItem(key);
+        return value === null && memory.has(key) ? memory.get(key) : value;
+      } catch (e) {
+        failed.add(key);
+        return memory.has(key) ? memory.get(key) : null;
+      }
+    },
+    setItem(key, value) {
+      const v = String(value);
+      memory.set(key, v);
+      try { window.localStorage.setItem(key, v); failed.delete(key); }
+      catch (e) { failed.add(key); }
+    },
+    removeItem(key) {
+      memory.delete(key);
+      try { window.localStorage.removeItem(key); failed.delete(key); }
+      catch (e) { failed.add(key); }
+    },
+  };
+  window.NEXORA_STORE = NEXORA_STORE;
+
 /* ==========================================================================
    NEXORA ADMIN · data-mock.js
-   Base de datos simulada y coherente en localStorage.
+   Base de datos simulada y coherente en NEXORA_STORE.
    Todos los módulos leen/escriben aquí, de modo que productos, stock,
    pedidos, promociones, usuarios y roles permanecen sincronizados
    (incluso entre pestañas, gracias al evento `storage`).
    ========================================================================== */
 
-export const STORAGE_KEY = 'nexora.admin.db.v1';
-export const SESSION_KEY = 'nexora.admin.session.v1';
-export const IGV_RATE = 0.18;
+const STORAGE_KEY = 'nexora.admin.db.v1';
+const SESSION_KEY = 'nexora.admin.session.v1';
+const IGV_RATE = 0.18;
 
 /* ---------------------------------------------------------------------------
    Catálogos y constantes
    --------------------------------------------------------------------------- */
-export const ACTIONS = { view: 'Ver', create: 'Crear', edit: 'Editar', delete: 'Eliminar' };
+const ACTIONS = { view: 'Ver', create: 'Crear', edit: 'Editar', delete: 'Eliminar' };
 
 /** Módulos del panel (alimentan el sidebar y la matriz de permisos). */
-export const MODULES = [
+const MODULES = [
   { key: 'resumen',     label: 'Resumen',        href: 'resumen.html',     icon: 'ph-squares-four', group: 'Principal',      actions: ['view'] },
   { key: 'caja',        label: 'Venta de Caja',  href: 'caja.html',        icon: 'ph-receipt',      group: 'Operaciones',    actions: ['view', 'create'], labels: { create: 'Vender' } },
   { key: 'pedidos',     label: 'Pedidos',        href: 'pedidos.html',     icon: 'ph-package',      group: 'Operaciones',    actions: ['view', 'create', 'edit', 'delete'] },
@@ -28,11 +59,11 @@ export const MODULES = [
   { key: 'reportes',    label: 'Reportes',       href: 'reportes.html',    icon: 'ph-chart-bar',    group: 'Administración', actions: ['view', 'create'], labels: { create: 'Exportar' } },
 ];
 
-export const CATEGORIES = ['Laptops', 'PCs', 'Componentes', 'Monitores', 'Periféricos'];
-export const SKU_PREFIX = { Laptops: 'LAP', PCs: 'PCS', Componentes: 'CMP', Monitores: 'MON', Periféricos: 'PER' };
+const CATEGORIES = ['Laptops', 'PCs', 'Componentes', 'Monitores', 'Periféricos'];
+const SKU_PREFIX = { Laptops: 'LAP', PCs: 'PCS', Componentes: 'CMP', Monitores: 'MON', Periféricos: 'PER' };
 
 /** Especificaciones técnicas por categoría (clave → etiqueta). */
-export const SPEC_FIELDS = {
+const SPEC_FIELDS = {
   Laptops: [
     { key: 'cpu', label: 'Procesador', ph: 'Intel Core i7-13700H' },
     { key: 'ram', label: 'Memoria RAM', ph: '16 GB DDR5' },
@@ -68,21 +99,21 @@ export const SPEC_FIELDS = {
   ],
 };
 
-export const ORDER_STATUSES = ['Pendiente', 'Procesando', 'Enviado', 'Entregado', 'Cancelado'];
-export const ORDER_FLOW = ['Pendiente', 'Procesando', 'Enviado', 'Entregado'];
-export const PAYMENT_METHODS = ['Yape/Plin', 'Tarjeta', 'Efectivo', 'Transferencia'];
-export const COURIERS = ['Olva Courier', 'Shalom', 'Delivery Nexora'];
+const ORDER_STATUSES = ['Pendiente', 'Procesando', 'Enviado', 'Entregado', 'Cancelado'];
+const ORDER_FLOW = ['Pendiente', 'Procesando', 'Enviado', 'Entregado'];
+const PAYMENT_METHODS = ['Yape/Plin', 'Tarjeta', 'Efectivo', 'Transferencia'];
+const COURIERS = ['Olva Courier', 'Shalom', 'Delivery Nexora'];
 
 /* ---------------------------------------------------------------------------
    Utilidades de fecha / número
    --------------------------------------------------------------------------- */
-export const round2 = (n) => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
-export const startOfDay = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
-export const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const round2 = (n) => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+const startOfDay = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
 const pad = (n) => String(n).padStart(2, '0');
 /** Clave local AAAA-MM-DD (no UTC). */
-export const dayKey = (d) => { const x = new Date(d); return `${x.getFullYear()}-${pad(x.getMonth() + 1)}-${pad(x.getDate())}`; };
-export const todayKey = () => dayKey(new Date());
+const dayKey = (d) => { const x = new Date(d); return `${x.getFullYear()}-${pad(x.getMonth() + 1)}-${pad(x.getDate())}`; };
+const todayKey = () => dayKey(new Date());
 
 function mulberry32(seed) {
   let a = seed;
@@ -95,7 +126,7 @@ function mulberry32(seed) {
 }
 
 /** Totales de una venta. Los precios de Nexora ya incluyen IGV (18 %). */
-export function calcTotals(lines) {
+function calcTotals(lines) {
   const total = round2(lines.reduce((acc, l) => acc + l.qty * l.price, 0));
   const subtotal = round2(total / (1 + IGV_RATE));
   return { total, subtotal, igv: round2(total - subtotal) };
@@ -339,11 +370,11 @@ let state = load();
 const listeners = new Set();
 
 function persist(s) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (err) { console.warn('No se pudo guardar en localStorage', err); }
+  try { NEXORA_STORE.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (err) { console.warn('No se pudo guardar en localStorage', err); }
 }
 function load() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = NEXORA_STORE.getItem(STORAGE_KEY);
     if (raw) { const s = JSON.parse(raw); if (s && s.version === 1) return s; }
   } catch { /* datos corruptos: se regenera */ }
   const seed = buildSeed();
@@ -353,13 +384,13 @@ function load() {
 function notify() { listeners.forEach((fn) => { try { fn(); } catch (err) { console.error(err); } }); }
 
 /** Suscribe una función que se ejecuta cuando cambian los datos (en esta u otra pestaña). */
-export function onDataChange(fn) { listeners.add(fn); return () => listeners.delete(fn); }
+function onDataChange(fn) { listeners.add(fn); return () => listeners.delete(fn); }
 
 window.addEventListener('storage', (e) => {
   if (e.key === STORAGE_KEY) { state = load(); notify(); }
 });
 
-export const db = {
+const db = {
   all: (col) => state[col],
   get: (col, id) => state[col].find((x) => x.id === id),
   insert(col, item) { state[col].push(item); this.commit(); return item; },
@@ -384,7 +415,7 @@ export const db = {
   reset() {
     state = buildSeed();
     persist(state);
-    try { localStorage.removeItem(SESSION_KEY); } catch { /* noop */ }
+    try { NEXORA_STORE.removeItem(SESSION_KEY); } catch { /* noop */ }
     notify();
   },
 };
@@ -392,15 +423,15 @@ export const db = {
 /* ---------------------------------------------------------------------------
    Sesión del administrador (simulada)
    --------------------------------------------------------------------------- */
-export function getSessionUser() {
+function getSessionUser() {
   let id = null;
-  try { id = localStorage.getItem(SESSION_KEY); } catch { /* noop */ }
+  try { id = NEXORA_STORE.getItem(SESSION_KEY); } catch { /* noop */ }
   const staff = state.users.filter((u) => u.type === 'Personal' && u.status === 'Activo');
   return staff.find((u) => u.id === id) || staff.find((u) => u.roleId === 'role_admin') || staff[0] || null;
 }
-export function setSessionUser(id) { try { localStorage.setItem(SESSION_KEY, id); } catch { /* noop */ } }
+function setSessionUser(id) { try { NEXORA_STORE.setItem(SESSION_KEY, id); } catch { /* noop */ } }
 
-export function hasPermission(roleId, module, action) {
+function hasPermission(roleId, module, action) {
   const role = db.get('roles', roleId);
   return !!(role && role.permissions && role.permissions[module] && role.permissions[module][action]);
 }
@@ -409,7 +440,7 @@ export function hasPermission(roleId, module, action) {
    Dominio: stock
    --------------------------------------------------------------------------- */
 /** Nivel de stock: agotado / crítico / bajo / óptimo. */
-export function stockLevel(p) {
+function stockLevel(p) {
   if (p.stock <= 0) return { key: 'out', label: 'Agotado', tone: 'danger', rank: 0 };
   if (p.stock <= Math.floor(p.minStock / 2)) return { key: 'critical', label: 'Crítico', tone: 'danger', rank: 1 };
   if (p.stock <= p.minStock) return { key: 'low', label: 'Stock bajo', tone: 'warning', rank: 2 };
@@ -441,7 +472,7 @@ function applyMovement({ productId, type, qty, reason, reference = '', note = ''
 }
 
 /** Registra una entrada, salida o ajuste de stock y guarda el kardex. */
-export function adjustStock(payload) {
+function adjustStock(payload) {
   const mov = applyMovement(payload);
   db.commit();
   return mov;
@@ -450,19 +481,19 @@ export function adjustStock(payload) {
 /* ---------------------------------------------------------------------------
    Dominio: promociones
    --------------------------------------------------------------------------- */
-export function promoStatus(p, now = new Date()) {
+function promoStatus(p, now = new Date()) {
   if (!p.active) return 'Pausada';
   const t = dayKey(now);
   if (t < p.startDate) return 'Programada';
   if (t > p.endDate) return 'Vencida';
   return 'Vigente';
 }
-export function promoApplies(p, product) {
+function promoApplies(p, product) {
   if (p.scope === 'all') return true;
   if (p.scope === 'category') return product.category === p.category;
   return (p.productIds || []).includes(product.id);
 }
-export function promoUnitDiscount(p, price) {
+function promoUnitDiscount(p, price) {
   const raw = p.type === 'percent' ? (price * p.value) / 100 : p.value;
   return round2(Math.min(price, Math.max(0, raw)));
 }
@@ -470,7 +501,7 @@ export function promoUnitDiscount(p, price) {
  * Mejor promoción para un producto. Las promociones sin código se aplican solas;
  * las que tienen código solo si el cajero ingresa ese cupón. No se acumulan: gana la mayor.
  */
-export function bestPromo(product, { code = '' } = {}) {
+function bestPromo(product, { code = '' } = {}) {
   const wanted = String(code).trim().toUpperCase();
   let best = null;
   state.promotions.forEach((p) => {
@@ -481,11 +512,11 @@ export function bestPromo(product, { code = '' } = {}) {
   });
   return best;
 }
-export function effectivePrice(product) {
+function effectivePrice(product) {
   const best = bestPromo(product);
   return best ? round2(product.price - best.discount) : product.price;
 }
-export function findCoupon(code) {
+function findCoupon(code) {
   const wanted = String(code).trim().toUpperCase();
   return state.promotions.find((p) => p.code && p.code.toUpperCase() === wanted);
 }
@@ -493,13 +524,13 @@ export function findCoupon(code) {
 /* ---------------------------------------------------------------------------
    Dominio: pedidos
    --------------------------------------------------------------------------- */
-export const isSale = (o) => o.status !== 'Cancelado';
+const isSale = (o) => o.status !== 'Cancelado';
 
 /**
  * Crea un pedido (web o caja), descuenta stock y registra el kardex.
  * `items`: [{ productId, qty, discount, promoId }]
  */
-export function createOrder({ channel, customer, items, payment, status, cashier = null, address = null, couponCode = '', comprobante = null }) {
+function createOrder({ channel, customer, items, payment, status, cashier = null, address = null, couponCode = '', comprobante = null }) {
   if (!items.length) throw new Error('El pedido no tiene productos');
   const lines = items.map((it) => {
     const p = db.get('products', it.productId);
@@ -529,7 +560,7 @@ export function createOrder({ channel, customer, items, payment, status, cashier
 }
 
 /** Cambia el estado de un pedido validando el flujo; al cancelar devuelve el stock. */
-export function setOrderStatus(orderId, status, { by = 'Sistema', note = '', courier = '', tracking = '' } = {}) {
+function setOrderStatus(orderId, status, { by = 'Sistema', note = '', courier = '', tracking = '' } = {}) {
   const order = db.get('orders', orderId);
   if (!order) throw new Error('Pedido no encontrado');
   const from = order.status;
@@ -552,3 +583,15 @@ export function setOrderStatus(orderId, status, { by = 'Sistema', note = '', cou
   db.commit();
   return order;
 }
+
+
+  window.NEXORA_DATA = {
+    STORAGE_KEY, SESSION_KEY, IGV_RATE,
+    ACTIONS, MODULES, CATEGORIES, SKU_PREFIX, SPEC_FIELDS,
+    ORDER_STATUSES, ORDER_FLOW, PAYMENT_METHODS, COURIERS,
+    round2, startOfDay, addDays, dayKey, todayKey, calcTotals,
+    onDataChange, db, getSessionUser, setSessionUser, hasPermission,
+    stockLevel, adjustStock, promoStatus, promoApplies, promoUnitDiscount,
+    bestPromo, effectivePrice, findCoupon, isSale, createOrder, setOrderStatus,
+  };
+})();

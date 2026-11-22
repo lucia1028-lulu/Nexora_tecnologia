@@ -1,13 +1,27 @@
+(function () {
+  'use strict';
+
+  const D = window.NEXORA_DATA;
+  const UI = window.NEXORA_UI;
+  if (!D || !UI) {
+    console.error('Nexora: falta data-mock.js o layout.js');
+    return;
+  }
+
+  const { db, onDataChange, promoStatus, promoApplies, CATEGORIES, dayKey, addDays } = D;
+  const { initLayout, $, $$, esc, norm, fmt, badge, toast, confirmDialog, openModal, closeModal, debounce } = UI;
+
+  let ctx;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ctx = initLayout({ module: 'promociones' });
+    if (ctx) main();
+  });
+
 /* ==========================================================================
    NEXORA ADMIN · promociones.js
    Creación y activación de descuentos por porcentaje/monto y fechas de vigencia
    ========================================================================== */
-import { db, onDataChange, promoStatus, promoApplies, CATEGORIES, dayKey, addDays } from './data-mock.js';
-import { initLayout, $, $$, esc, norm, fmt, badge, toast, confirmDialog, openModal, closeModal, debounce } from './layout.js';
-
-const ctx = initLayout({ module: 'promociones' });
-if (ctx) main();
-
 function main() {
   const STATUS_META = {
     Vigente: { tone: 'success', cls: 'vigente', icon: 'ph-lightning' },
@@ -221,3 +235,5 @@ function main() {
   render();
   onDataChange(() => { render(); if (dlg.open) { renderPicker(); updateAffect(); } });
 }
+
+})();

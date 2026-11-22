@@ -1,13 +1,27 @@
+(function () {
+  'use strict';
+
+  const D = window.NEXORA_DATA;
+  const UI = window.NEXORA_UI;
+  if (!D || !UI) {
+    console.error('Nexora: falta data-mock.js o layout.js');
+    return;
+  }
+
+  const { db, onDataChange, adjustStock, stockLevel, CATEGORIES, dayKey } = D;
+  const { initLayout, $, $$, esc, norm, fmt, badge, emptyRow, renderPager, downloadCSV, toast, openModal, closeModal, debounce } = UI;
+
+  let ctx;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ctx = initLayout({ module: 'inventario' });
+    if (ctx) main();
+  });
+
 /* ==========================================================================
    NEXORA ADMIN · inventario.js
    Entradas/salidas de stock, alertas de stock mínimo y kardex básico
    ========================================================================== */
-import { db, onDataChange, adjustStock, stockLevel, CATEGORIES, dayKey } from './data-mock.js';
-import { initLayout, $, $$, esc, norm, fmt, badge, emptyRow, renderPager, downloadCSV, toast, openModal, closeModal, debounce } from './layout.js';
-
-const ctx = initLayout({ module: 'inventario' });
-if (ctx) main();
-
 function main() {
   const PAGE_SIZE = 12;
   const REASONS = {
@@ -286,3 +300,5 @@ function main() {
   const initial = location.hash.replace('#', '');
   if (['kardex', 'alertas'].includes(initial)) setTab(initial);
 }
+
+})();

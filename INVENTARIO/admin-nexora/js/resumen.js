@@ -1,13 +1,27 @@
+(function () {
+  'use strict';
+
+  const D = window.NEXORA_DATA;
+  const UI = window.NEXORA_UI;
+  if (!D || !UI) {
+    console.error('Nexora: falta data-mock.js o layout.js');
+    return;
+  }
+
+  const { db, onDataChange, isSale, stockLevel, promoStatus, dayKey, addDays, startOfDay } = D;
+  const { initLayout, $, $$, esc, fmt, badge, orderTone, areaChart, donut, sparkline } = UI;
+
+  let ctx;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ctx = initLayout({ module: 'resumen' });
+    if (ctx) main();
+  });
+
 /* ==========================================================================
    NEXORA ADMIN · resumen.js
    KPIs dinámicos, gráficos, últimos movimientos y promociones vigentes
    ========================================================================== */
-import { db, onDataChange, isSale, stockLevel, promoStatus, dayKey, addDays, startOfDay } from './data-mock.js';
-import { initLayout, $, $$, esc, fmt, badge, orderTone, areaChart, donut, sparkline } from './layout.js';
-
-const ctx = initLayout({ module: 'resumen' });
-if (ctx) main();
-
 function main() {
   let range = 30;
 
@@ -181,3 +195,5 @@ function main() {
   render();
   onDataChange(render);   // sincronización en tiempo real con los demás módulos
 }
+
+})();
